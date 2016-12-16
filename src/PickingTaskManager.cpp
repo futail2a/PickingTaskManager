@@ -118,12 +118,12 @@ RTC::ReturnCode_t PickingTaskManager::onDeactivated(RTC::UniqueId ec_id)
 }
 */
 
-/*
+
 RTC::ReturnCode_t PickingTaskManager::onExecute(RTC::UniqueId ec_id)
 {
   return RTC::RTC_OK;
 }
-*/
+
 
 /*
 RTC::ReturnCode_t PickingTaskManager::onAborting(RTC::UniqueId ec_id)
