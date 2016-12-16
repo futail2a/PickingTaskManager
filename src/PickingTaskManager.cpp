@@ -235,7 +235,7 @@ extern "C"
 //for debugging only, delete this function before release
 void PickingTaskManager::setSampleManipPlan(){
     std::string str;
-	std::ifstream ifs("/home/tao/workspace/PickingTaskManager/sampleManipPath.csv");
+	std::ifstream ifs("sampleManipPath.csv");
 
     if (!ifs){
         std::cout << "error" << std::endl;
@@ -254,12 +254,12 @@ void PickingTaskManager::setSampleManipPlan(){
 
         	CORBA::ULong len = posture.jointInfoSeq.length();
             posture.jointInfoSeq.length(len + 1);
-            posture.jointInfoSeq[len + 1] = joint;
+            posture.jointInfoSeq[len] = joint;
     	}
 
         CORBA::ULong len = m_manipPlan->robotJointInfoSeq.length();
         m_manipPlan->robotJointInfoSeq.length(len + 1);
-	    m_manipPlan->robotJointInfoSeq[len + 1]=posture;
+	    m_manipPlan->robotJointInfoSeq[len]=posture;
     }
 
 }
