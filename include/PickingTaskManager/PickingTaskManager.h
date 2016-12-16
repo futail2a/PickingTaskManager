@@ -124,7 +124,7 @@ class PickingTaskManager
    * 
    * 
    */
-  // virtual RTC::ReturnCode_t onActivated(RTC::UniqueId ec_id);
+   virtual RTC::ReturnCode_t onActivated(RTC::UniqueId ec_id);
 
   /***
    *
@@ -290,6 +290,17 @@ class PickingTaskManager
   // <rtc-template block="private_operation">
   
   // </rtc-template>
+
+  Manipulation::ObjectIdentifier* m_objectID;
+  Manipulation::ObjectInfo* m_objInfo;
+
+  Manipulation::RobotIdentifier* m_robotID;
+  Manipulation::RobotJointInfo* m_robotJoint;
+
+  Manipulation::RobotJointInfo* m_startRobotJointInfo;
+  Manipulation::RobotJointInfo* m_goalRobotJointInfo;
+  Manipulation::ManipulationPlan* m_manipPlan;
+
 
 };
 

@@ -104,12 +104,22 @@ RTC::ReturnCode_t PickingTaskManager::onShutdown(RTC::UniqueId ec_id)
 }
 */
 
-/*
+
 RTC::ReturnCode_t PickingTaskManager::onActivated(RTC::UniqueId ec_id)
 {
+	m_objectID = new Manipulation::ObjectIdentifier();
+	m_objInfo = new Manipulation::ObjectInfo();
+
+	m_robotID = new Manipulation::RobotIdentifier();
+	m_robotJoint = new Manipulation::RobotJointInfo();
+
+	m_startRobotJointInfo = new Manipulation::RobotJointInfo();
+	m_goalRobotJointInfo = new Manipulation::RobotJointInfo();
+	m_manipPlan = new Manipulation::ManipulationPlan();
+
   return RTC::RTC_OK;
 }
-*/
+
 
 /*
 RTC::ReturnCode_t PickingTaskManager::onDeactivated(RTC::UniqueId ec_id)
@@ -124,17 +134,36 @@ RTC::ReturnCode_t PickingTaskManager::onExecute(RTC::UniqueId ec_id)
   std::cout << "Please input command:" << std::endl;
   char c;
   std::cin >>c;
-/*
-  switch(c){
-  case 'd':
-	  m_ObjectDetectionService->();
-	  m_KinematicsSolverService->();
-	  m_ManipulationPlannerService->();
-	  m_MotionGeneratorService->();
 
+  switch(c){
+  /*
+  case 's':
+	std::cout << "Start" << std::endl;
+	break;
+  */
+  case 'd':
+	  std::cout << "Test detecting objects.." << std::endl;
+	  m_ObjectDetectionService->detectObject((*m_objectID), m_objInfo);
+	  break;
+
+  case 'k':
+	  std::cout << "Test solving kinematics.." << std::endl;
+	  m_KinematicsSolverService->solveInverseKinematics((*m_objInfo), m_goalRobotJointInfo);
+	  break;
+
+  case 'p':
+	  std::cout << "Test plannig.." << std::endl;
+
+	  m_MotionGeneratorService->getCurrentRobotJointInfo((*m_robotID), m_robotJoint);
+	  m_ManipulationPlannerService->planManipulation((*m_robotID), (*m_startRobotJointInfo), (*m_goalRobotJointInfo), m_manipPlan);
+	  break;
+
+  case 'g':
+	  std::cout << "Test motion generation.." << std::endl;
+	  m_MotionGeneratorService->followManipPlan((*m_manipPlan));
 	  break;
   }
-*/
+
   return RTC::RTC_OK;
 }
 
