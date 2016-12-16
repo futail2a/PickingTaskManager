@@ -121,6 +121,20 @@ RTC::ReturnCode_t PickingTaskManager::onDeactivated(RTC::UniqueId ec_id)
 
 RTC::ReturnCode_t PickingTaskManager::onExecute(RTC::UniqueId ec_id)
 {
+  std::cout << "Please input command:" << std::endl;
+  char c;
+  std::cin >>c;
+/*
+  switch(c){
+  case 'd':
+	  m_ObjectDetectionService->();
+	  m_KinematicsSolverService->();
+	  m_ManipulationPlannerService->();
+	  m_MotionGeneratorService->();
+
+	  break;
+  }
+*/
   return RTC::RTC_OK;
 }
 
