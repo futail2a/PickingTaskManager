@@ -1,0 +1,54 @@
+# PickingTaskManager CMake config file
+#
+# This file sets the following variables:
+# PickingTaskManager_FOUND - Always TRUE.
+# PickingTaskManager_INCLUDE_DIRS - Directories containing the PickingTaskManager include files.
+# PickingTaskManager_IDL_DIRS - Directories containing the PickingTaskManager IDL files.
+# PickingTaskManager_LIBRARIES - Libraries needed to use PickingTaskManager.
+# PickingTaskManager_DEFINITIONS - Compiler flags for PickingTaskManager.
+# PickingTaskManager_VERSION - The version of PickingTaskManager found.
+# PickingTaskManager_VERSION_MAJOR - The major version of PickingTaskManager found.
+# PickingTaskManager_VERSION_MINOR - The minor version of PickingTaskManager found.
+# PickingTaskManager_VERSION_REVISION - The revision version of PickingTaskManager found.
+# PickingTaskManager_VERSION_CANDIDATE - The candidate version of PickingTaskManager found.
+
+message(STATUS "Found PickingTaskManager-@PROJECT_VERSION@")
+set(PickingTaskManager_FOUND TRUE)
+
+find_package(<dependency> REQUIRED)
+
+#set(PickingTaskManager_INCLUDE_DIRS
+#    "@CMAKE_INSTALL_PREFIX@/include/@PROJECT_NAME_LOWER@-@PROJECT_VERSION_MAJOR@"
+#    ${<dependency>_INCLUDE_DIRS}
+#    )
+#
+#set(PickingTaskManager_IDL_DIRS
+#    "@CMAKE_INSTALL_PREFIX@/include/@PROJECT_NAME_LOWER@-@PROJECT_VERSION_MAJOR@/idl")
+set(PickingTaskManager_INCLUDE_DIRS
+    "@CMAKE_INSTALL_PREFIX@/include/@CPACK_PACKAGE_FILE_NAME@"
+    ${<dependency>_INCLUDE_DIRS}
+    )
+set(PickingTaskManager_IDL_DIRS
+    "@CMAKE_INSTALL_PREFIX@/include/@CPACK_PACKAGE_FILE_NAME@/idl")
+
+
+if(WIN32)
+    set(PickingTaskManager_LIBRARIES
+        "@CMAKE_INSTALL_PREFIX@/@LIB_INSTALL_DIR@/@CMAKE_SHARED_LIBRARY_PREFIX@@PROJECT_NAME_LOWER@@CMAKE_STATIC_LIBRARY_SUFFIX@"
+        ${<dependency>_LIBRARIES}
+        )
+else(WIN32)
+    set(PickingTaskManager_LIBRARIES
+        "@CMAKE_INSTALL_PREFIX@/@LIB_INSTALL_DIR@/@CMAKE_SHARED_LIBRARY_PREFIX@@PROJECT_NAME_LOWER@@CMAKE_SHARED_LIBRARY_SUFFIX@"
+        ${<dependency>_LIBRARIES}
+        )
+endif(WIN32)
+
+set(PickingTaskManager_DEFINITIONS ${<dependency>_DEFINITIONS})
+
+set(PickingTaskManager_VERSION @PROJECT_VERSION@)
+set(PickingTaskManager_VERSION_MAJOR @PROJECT_VERSION_MAJOR@)
+set(PickingTaskManager_VERSION_MINOR @PROJECT_VERSION_MINOR@)
+set(PickingTaskManager_VERSION_REVISION @PROJECT_VERSION_REVISION@)
+set(PickingTaskManager_VERSION_CANDIDATE @PROJECT_VERSION_CANDIDATE@)
+
