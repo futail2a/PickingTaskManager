@@ -103,9 +103,7 @@ RTC::ReturnCode_t PickingTaskManager::onShutdown(RTC::UniqueId ec_id)
   return RTC::RTC_OK;
 }
 */
-
-
-RTC::ReturnCode_t PickingTaskManager::onActivated(RTC::UniqueId ec_id)
+void PickingTaskManager::initParams()
 {
 	m_objectID = new Manipulation::ObjectIdentifier();
 	m_objInfo = new Manipulation::ObjectInfo();
@@ -116,7 +114,11 @@ RTC::ReturnCode_t PickingTaskManager::onActivated(RTC::UniqueId ec_id)
 	m_startRobotJointInfo = new Manipulation::RobotJointInfo();
 	m_goalRobotJointInfo = new Manipulation::RobotJointInfo();
 	m_manipPlan = new Manipulation::ManipulationPlan();
+}
 
+RTC::ReturnCode_t PickingTaskManager::onActivated(RTC::UniqueId ec_id)
+{
+  initParams();
   return RTC::RTC_OK;
 }
 

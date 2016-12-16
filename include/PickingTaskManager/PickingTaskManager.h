@@ -291,6 +291,8 @@ class PickingTaskManager
   
   // </rtc-template>
 
+  void initParams();
+
   Manipulation::ObjectIdentifier* m_objectID;
   Manipulation::ObjectInfo* m_objInfo;
 
