@@ -303,6 +303,8 @@ class PickingTaskManager
   Manipulation::RobotJointInfo* m_goalRobotJointInfo;
   Manipulation::ManipulationPlan* m_manipPlan;
 
+  //for debugging only, delete this function before release
+  void setSampleManipPlan();
 
 };
 

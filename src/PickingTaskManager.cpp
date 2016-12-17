@@ -8,7 +8,8 @@
  */
 
 #include "PickingTaskManager.h"
-
+#include <fstream>
+#include<sstream>
 // Module specification
 // <rtc-template block="module_spec">
 static const char* pickingtaskmanager_spec[] =
@@ -162,13 +163,22 @@ RTC::ReturnCode_t PickingTaskManager::onExecute(RTC::UniqueId ec_id)
 
   case 'g':
 	  std::cout << "Test motion generation.." << std::endl;
+	  m_manipPlan;
 	  m_MotionGeneratorService->followManipPlan((*m_manipPlan));
 	  break;
+
+  case't':
+	  setSampleManipPlan();
+	  for(int i =0;i<m_manipPlan->robotJointInfoSeq.length(); i++){
+		  for(int j=0;j<6;j++){
+			  std::cout << m_manipPlan->robotJointInfoSeq[i].jointInfoSeq[j].jointAngle << " ";
+		  }
+		  std::cout <<std::endl;
+	  }
   }
 
   return RTC::RTC_OK;
 }
-
 
 /*
 RTC::ReturnCode_t PickingTaskManager::onAborting(RTC::UniqueId ec_id)
@@ -221,3 +231,35 @@ extern "C"
 };
 
 
+
+//for debugging only, delete this function before release
+void PickingTaskManager::setSampleManipPlan(){
+    std::string str;
+	std::ifstream ifs("/home/tao/workspace/PickingTaskManager/sampleManipPath.csv");
+
+    if (!ifs){
+        std::cout << "error" << std::endl;
+    }
+
+    while(getline(ifs,str))
+    {
+        std::string tmp;
+        std::istringstream stream(str);
+    	Manipulation::RobotJointInfo posture;
+
+        while(getline(stream,tmp,','))
+        {
+        	Manipulation::JointInfo joint;
+        	joint.jointAngle = std::stod(tmp);
+
+        	CORBA::ULong len = posture.jointInfoSeq.length();
+            posture.jointInfoSeq.length(len + 1);
+            posture.jointInfoSeq[len + 1] = joint;
+    	}
+
+        CORBA::ULong len = m_manipPlan->robotJointInfoSeq.length();
+        m_manipPlan->robotJointInfoSeq.length(len + 1);
+	    m_manipPlan->robotJointInfoSeq[len + 1]=posture;
+    }
+
+}
