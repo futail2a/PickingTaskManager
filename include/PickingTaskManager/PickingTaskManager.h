@@ -35,6 +35,9 @@
 #include <rtm/DataInPort.h>
 #include <rtm/DataOutPort.h>
 
+#include "CUIApp.h"
+class CUIApp;
+
 using namespace RTC;
 
 /*!
@@ -289,22 +292,16 @@ class PickingTaskManager
 
   // <rtc-template block="private_operation">
   
-  // </rtc-template>
+  // </rtc-template>]
 
-  void initParams();
+	 CUIApp* m_app;
 
-  Manipulation::ObjectIdentifier* m_objectID;
-  Manipulation::ObjectInfo* m_objInfo;
-
-  Manipulation::RobotIdentifier* m_robotID;
-  Manipulation::RobotJointInfo* m_robotJoint;
-
-  Manipulation::RobotJointInfo* m_startRobotJointInfo;
-  Manipulation::RobotJointInfo* m_goalRobotJointInfo;
-  Manipulation::ManipulationPlan* m_manipPlan;
-
-  //for debugging only, delete this function before release
-  void setSampleManipPlan();
+ public:
+	 void callDetectObject(const Manipulation::ObjectIdentifier& objectID, Manipulation::ObjectInfo_out objInfo);
+	 void callSolveInverseKinematics(const Manipulation::ObjectInfo& objInfo, Manipulation::RobotJointInfo_out goalRobotJointInfo);
+	 void callGetCurrentRobotJointInfo(const Manipulation::RobotIdentifier& robotID, Manipulation::RobotJointInfo_out robotJoint);
+	 void callPlanManipulation(const Manipulation::RobotIdentifier& robotID, const Manipulation::RobotJointInfo& startRobotJointInfo, const Manipulation::RobotJointInfo& goalRobotJointInfo, Manipulation::ManipulationPlan_out manipPlan);
+	 void callFollowManipPlan(const Manipulation::ManipulationPlan& manipPlan);
 
 };
 
