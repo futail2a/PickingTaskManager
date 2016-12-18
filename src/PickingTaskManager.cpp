@@ -7,9 +7,12 @@
  * $Id$
  */
 
-#include "PickingTaskManager.h"
+#include <PickingTaskManager.h>
+#include <CUIApp.h>
+
 #include <fstream>
-#include<sstream>
+#include <sstream>
+
 // Module specification
 // <rtc-template block="module_spec">
 static const char* pickingtaskmanager_spec[] =

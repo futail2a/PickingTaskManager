@@ -5,7 +5,6 @@
 #include <sstream>
 #include "TrajectoryPlannerStub.h"
 
-#include "PickingTaskManager.h"
 class PickingTaskManager;
 
 class CUIApp{

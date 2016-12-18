@@ -1,4 +1,5 @@
 #include <CUIApp.h>
+#include <PickingTaskManager.h>
 
 CUIApp::CUIApp(PickingTaskManager* compPtr)
 {

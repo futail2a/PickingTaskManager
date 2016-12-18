@@ -35,10 +35,9 @@
 #include <rtm/DataInPort.h>
 #include <rtm/DataOutPort.h>
 
-#include "CUIApp.h"
-class CUIApp;
-
 using namespace RTC;
+
+class CUIApp;
 
 /*!
  * @class PickingTaskManager

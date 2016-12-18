@@ -1,4 +1,4 @@
-set(comp_srcs PickingTaskManager.cpp CuiApp.cpp)
+set(comp_srcs PickingTaskManager.cpp CUIApp.cpp)
 set(standalone_srcs PickingTaskManagerComp.cpp)
 
 if (DEFINED OPENRTM_INCLUDE_DIRS)
