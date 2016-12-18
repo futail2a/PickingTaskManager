@@ -1,4 +1,4 @@
-#include <CuiApp.h>
+#include <CUIApp.h>
 	(*m_objectID)
 	m_objInfo
 	m_goalRobotJointInfo);

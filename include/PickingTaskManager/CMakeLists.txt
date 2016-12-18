@@ -1,4 +1,4 @@
-set(hdrs PickingTaskManager.h CuiApp.h
+set(hdrs PickingTaskManager.h CUIApp.h
     PARENT_SCOPE
     )
 
