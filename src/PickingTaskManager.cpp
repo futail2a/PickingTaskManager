@@ -7,8 +7,8 @@
  * $Id$
  */
 
-#include <PickingTaskManager.h>
-#include <CUIApp.h>
+#include "PickingTaskManager.h"
+#include "CUIApp.h"
 
 #include <fstream>
 #include <sstream>

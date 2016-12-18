@@ -32,6 +32,6 @@ private:
 	Manipulation::ManipulationPlan* m_manipPlan;
 	
 	PickingTaskManager* m_rtc;
-}
+};
 
 #endif // CUIAPP_H
