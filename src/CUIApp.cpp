@@ -24,6 +24,7 @@ void CUIApp::detectObj(){
 	(*m_objectID).name = name;
 
 	m_rtc->callDetectObject((*m_objectID), m_objInfo);
+	m_rtc->callSolveInverseKinematics((*m_objInfo), m_goalRobotJointInfo);
 }
 
 void CUIApp::searchMotionPlan(){
@@ -45,6 +46,7 @@ void CUIApp::generateMotionPlan(){
 }
 
 void CUIApp::showParams(){
+	std::cout << "Current motion plan" << std::endl;
 	for (int i = 0; i<m_manipPlan->robotJointInfoSeq.length(); i++){
 		for (int j = 0; j<m_manipPlan->robotJointInfoSeq[i].jointInfoSeq.length(); j++){
 			std::cout << m_manipPlan->robotJointInfoSeq[i].jointInfoSeq[j].jointAngle << " ";
@@ -53,9 +55,10 @@ void CUIApp::showParams(){
 	}
 }
 
-
-//for debugging only, delete this function before release
+//for debugging
 void CUIApp::setSampleManipPlan(){
+	std::cout << "Generate motion from a csv file" << std::endl;
+
 	std::string str;
 	std::ifstream ifs("sampleManipPath.csv");
 
@@ -84,4 +87,6 @@ void CUIApp::setSampleManipPlan(){
 		m_manipPlan->robotJointInfoSeq[len] = posture;
 	}
 
+	//std::cout << "Test solving kinematics.." << std::endl;
+	//m_KinematicsSolverService->solveInverseKinematics((*m_objInfo), m_goalRobotJointInfo);
 }

@@ -130,7 +130,6 @@ RTC::ReturnCode_t PickingTaskManager::onExecute(RTC::UniqueId ec_id)
   std::cin >>c;
 
   switch(c){
-  
   case 'd':
 	  m_app->detectObj();
 	  break;
@@ -142,14 +141,7 @@ RTC::ReturnCode_t PickingTaskManager::onExecute(RTC::UniqueId ec_id)
   case 'g':
 	  m_app->generateMotionPlan();
 	  break;
-
-  case 'e':
-	  std::cout << "Generate motion from a csv file" << std::endl;
-	  m_app->setSampleManipPlan();
-	  //std::cout << "Test solving kinematics.." << std::endl;
-	  //m_KinematicsSolverService->solveInverseKinematics((*m_objInfo), m_goalRobotJointInfo);
-	  break;
-
+	  
   case's':
 	  m_app->showParams();
 	  break;
@@ -161,7 +153,11 @@ RTC::ReturnCode_t PickingTaskManager::onExecute(RTC::UniqueId ec_id)
 	  std::cout << "s: show current parameters" << std::endl;
 
 	  std::cout << "h: help" << std::endl;
-	  std::cout << "e: debug mode" << std::endl;
+	  std::cout << "c: generate motion form csv" << std::endl;
+	  break;
+
+  case 'c':
+	  m_app->setSampleManipPlan();
 	  break;
   }
 
