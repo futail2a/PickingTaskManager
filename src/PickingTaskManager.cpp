@@ -134,42 +134,57 @@ RTC::ReturnCode_t PickingTaskManager::onDeactivated(RTC::UniqueId ec_id)
 
 RTC::ReturnCode_t PickingTaskManager::onExecute(RTC::UniqueId ec_id)
 {
-  std::cout << "Please input command:" << std::endl;
+  std::cout << "Please input command (h:help):" << std::endl;
   char c;
   std::cin >>c;
 
   switch(c){
-  /*
-  case 's':
-	std::cout << "Start" << std::endl;
+  
+  case 'h':
+	  std::cout << "d: detect target object" << std::endl;
+	  std::cout << "p: search motion plan" << std::endl;
+	  std::cout << "g: generate motion plan" << std::endl;
+	  std::cout << "s: show current parameters" << std::endl;
+
+	  std::cout << "h: help" << std::endl;
+	  std::cout << "e: debug mode" << std::endl;
 	break;
-  */
+  
   case 'd':
-	  std::cout << "Test detecting objects.." << std::endl;
+	  std::cout << "--Object Detection--" << std::endl;
+	  std::cout << "Please input target object name" << std::endl;
+	  char* name;
+	  std::cin >> name;
+	  (*m_objectID).name = name;
+
 	  m_ObjectDetectionService->detectObject((*m_objectID), m_objInfo);
 	  break;
 
-  case 'k':
-	  std::cout << "Test solving kinematics.." << std::endl;
-	  m_KinematicsSolverService->solveInverseKinematics((*m_objInfo), m_goalRobotJointInfo);
-	  break;
-
   case 'p':
-	  std::cout << "Test plannig.." << std::endl;
+	  std::cout << "--Motion Plannig--" << std::endl;
+
+	  std::cout << "Solve grasping position" << std::endl;
+	  m_KinematicsSolverService->solveInverseKinematics((*m_objInfo), m_goalRobotJointInfo);
 
 	  m_MotionGeneratorService->getCurrentRobotJointInfo((*m_robotID), m_robotJoint);
 	  m_ManipulationPlannerService->planManipulation((*m_robotID), (*m_startRobotJointInfo), (*m_goalRobotJointInfo), m_manipPlan);
 	  break;
 
   case 'g':
-	  std::cout << "Test motion generation.." << std::endl;
+	  std::cout << "--Motion Generation--" << std::endl;
 	  m_MotionGeneratorService->followManipPlan((*m_manipPlan));
 	  break;
 
-  case't':
+  case 'e':
+	  std::cout << "generate motion from csv file" << std::endl;
 	  setSampleManipPlan();
+	  //std::cout << "Test solving kinematics.." << std::endl;
+	  //m_KinematicsSolverService->solveInverseKinematics((*m_objInfo), m_goalRobotJointInfo);
+	  break;
+
+  case's':
 	  for(int i =0;i<m_manipPlan->robotJointInfoSeq.length(); i++){
-		  for(int j=0;j<6;j++){
+		  for (int j = 0; j<m_manipPlan->robotJointInfoSeq[i].jointInfoSeq.length(); j++){
 			  std::cout << m_manipPlan->robotJointInfoSeq[i].jointInfoSeq[j].jointAngle << " ";
 		  }
 		  std::cout <<std::endl;
