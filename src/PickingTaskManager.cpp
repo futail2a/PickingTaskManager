@@ -163,7 +163,6 @@ RTC::ReturnCode_t PickingTaskManager::onExecute(RTC::UniqueId ec_id)
 
   case 'g':
 	  std::cout << "Test motion generation.." << std::endl;
-	  m_manipPlan;
 	  m_MotionGeneratorService->followManipPlan((*m_manipPlan));
 	  break;
 
