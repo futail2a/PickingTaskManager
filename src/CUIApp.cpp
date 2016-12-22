@@ -19,12 +19,20 @@ CUIApp::CUIApp(PickingTaskManager* compPtr)
 void CUIApp::detectObj(){
 	std::cout << "--Object Detection--" << std::endl;
 	std::cout << "Please input target object name" << std::endl;
-	char* name;
-	std::cin >> name;
-	(*m_objectID).name = name;
 
-	m_rtc->callDetectObject((*m_objectID), m_objInfo);
-	m_rtc->callSolveInverseKinematics((*m_objInfo), m_goalRobotJointInfo);
+	std::string name;
+	std::cin >> name;
+
+	m_objectID->name = CORBA::string_dup(name.c_str());
+
+	try{
+		m_rtc->callDetectObject((*m_objectID), m_objInfo);
+		m_rtc->callSolveInverseKinematics((*m_objInfo), m_goalRobotJointInfo);
+	}catch(CORBA::SystemException &e){
+		std::cout << "Port Not Connected" <<std::endl;
+	}
+
+	//CORBA::string_free(m_objectID->name);
 }
 
 void CUIApp::searchMotionPlan(){
