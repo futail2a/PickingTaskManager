@@ -42,7 +42,9 @@ PickingTaskManager::PickingTaskManager(RTC::Manager* manager)
     m_ObjectDetectionServicePort("ObjectDetectionService"),
     m_ManipulationPlannerServicePort("ManipulationPlannerService"),
     m_KinematicsSolverServicePort("KinematicsSolverService"),
-    m_MotionGeneratorServicePort("MotionGeneratorService")
+    m_MotionGeneratorServicePort("MotionGeneratorService"),
+    m_JARA_ARM::ManipulatorCommonInterface_MiddlePort("JARA_ARM::ManipulatorCommonInterface_Middle"),
+    m_ObjectHandleStrategyServicePort("ObjectHandleStrategyService")
 
     // </rtc-template>
 {
@@ -70,14 +72,18 @@ RTC::ReturnCode_t PickingTaskManager::onInitialize()
   // Set service consumers to Ports
   m_ObjectDetectionServicePort.registerConsumer("ObjectDetectionService", "Manipulation::ObjectDetectionService", m_ObjectDetectionService);
   m_ManipulationPlannerServicePort.registerConsumer("ManipulationPlannerService", "Manipulation::ManipulationPlannerService", m_ManipulationPlannerService);
-  m_KinematicsSolverServicePort.registerConsumer("KinematicsSolverService", "Manipulation::KinematicsSolverService", m_KinematicsSolverService);
+  m_KinematicsSolverServicePort.registerConsumer("KinematicsSolverService", "Manipulation::KinematicSolverService", m_KinematicsSolverService);
   m_MotionGeneratorServicePort.registerConsumer("MotionGeneratorService", "Manipulation::MotionGeneratorService", m_MotionGeneratorService);
+  m_JARA_ARM::ManipulatorCommonInterface_MiddlePort.registerConsumer("JARA_ARM::ManipulatorCommonInterface_Middle", "JARA_ARM::ManipulatorCommonInterface_Middle", m_JARA_ARM::ManipulatorCommonInterface_Middle);
+  m_ObjectHandleStrategyServicePort.registerConsumer("ObjectHandleStrategyService", "Manipulation::ObjectHandleStrategyService", m_ObjectHandleStrategyService);
   
   // Set CORBA Service Ports
   addPort(m_ObjectDetectionServicePort);
   addPort(m_ManipulationPlannerServicePort);
   addPort(m_KinematicsSolverServicePort);
   addPort(m_MotionGeneratorServicePort);
+  addPort(m_JARA_ARM::ManipulatorCommonInterface_MiddlePort);
+  addPort(m_ObjectHandleStrategyServicePort);
   
   // </rtc-template>
 

@@ -114,7 +114,7 @@ Lang Type:
 	Interface:   
 		[Service Consumer Interfaces]
 		Name:          KinematicsSolverService
-		Type:          Manipulation::KinematicsSolverService
+		Type:          Manipulation::KinematicSolverService
 		Description:   
 		Argument:      
 		Return Value:  
@@ -127,6 +127,30 @@ Lang Type:
 		[Service Consumer Interfaces]
 		Name:          MotionGeneratorService
 		Type:          Manipulation::MotionGeneratorService
+		Description:   
+		Argument:      
+		Return Value:  
+		Exception:     
+		PreCondition:  
+		PostCondition: 
+	PortName:    JARA_ARM::ManipulatorCommonInterface_Middle
+	Description: 
+	Interface:   
+		[Service Consumer Interfaces]
+		Name:          JARA_ARM::ManipulatorCommonInterface_Middle
+		Type:          JARA_ARM::ManipulatorCommonInterface_Middle
+		Description:   
+		Argument:      
+		Return Value:  
+		Exception:     
+		PreCondition:  
+		PostCondition: 
+	PortName:    ObjectHandleStrategyService
+	Description: 
+	Interface:   
+		[Service Consumer Interfaces]
+		Name:          ObjectHandleStrategyService
+		Type:          Manipulation::ObjectHandleStrategyService
 		Description:   
 		Argument:      
 		Return Value:  

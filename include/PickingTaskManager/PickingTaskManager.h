@@ -22,6 +22,8 @@
 // Service Consumer stub headers
 // <rtc-template block="consumer_stub_h">
 #include "TrajectoryPlannerStub.h"
+#include "ManipulatorCommonInterface_MiddleLevelStub.h"
+#include "TrajectoryPlannerStub.h"
 
 // </rtc-template>
 
@@ -259,6 +261,12 @@ class PickingTaskManager
   /*!
    */
   RTC::CorbaPort m_MotionGeneratorServicePort;
+  /*!
+   */
+  RTC::CorbaPort m_JARA_ARM::ManipulatorCommonInterface_MiddlePort;
+  /*!
+   */
+  RTC::CorbaPort m_ObjectHandleStrategyServicePort;
   
   // </rtc-template>
 
@@ -277,10 +285,16 @@ class PickingTaskManager
   RTC::CorbaConsumer<Manipulation::ManipulationPlannerService> m_ManipulationPlannerService;
   /*!
    */
-  RTC::CorbaConsumer<Manipulation::KinematicsSolverService> m_KinematicsSolverService;
+  RTC::CorbaConsumer<Manipulation::KinematicSolverService> m_KinematicsSolverService;
   /*!
    */
   RTC::CorbaConsumer<Manipulation::MotionGeneratorService> m_MotionGeneratorService;
+  /*!
+   */
+  RTC::CorbaConsumer<JARA_ARM::ManipulatorCommonInterface_Middle> m_JARA_ARM::ManipulatorCommonInterface_Middle;
+  /*!
+   */
+  RTC::CorbaConsumer<Manipulation::ObjectHandleStrategyService> m_ObjectHandleStrategyService;
   
   // </rtc-template>
 

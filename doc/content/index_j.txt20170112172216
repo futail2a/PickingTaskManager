@@ -110,10 +110,8 @@ PickingTaskManagerは ``PickingTaskManagerComp`` を実行（ ``${prefix}/compon
 =============== =========== ============================== ====
 ObjectDetectionService ServicePort Manipulation::ObjectDetectionService 
 ManipulationPlannerService ServicePort Manipulation::ManipulationPlannerService 
-KinematicsSolverService ServicePort Manipulation::KinematicSolverService 
+KinematicsSolverService ServicePort Manipulation::KinematicsSolverService 
 MotionGeneratorService ServicePort Manipulation::MotionGeneratorService 
-JARA_ARM::ManipulatorCommonInterface_Middle ServicePort JARA_ARM::ManipulatorCommonInterface_Middle 
-ObjectHandleStrategyService ServicePort Manipulation::ObjectHandleStrategyService 
 =============== =========== ============================== ====
 
 例
