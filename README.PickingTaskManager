@@ -133,11 +133,11 @@ Lang Type:
 		Exception:     
 		PreCondition:  
 		PostCondition: 
-	PortName:    JARA_ARM::ManipulatorCommonInterface_Middle
+	PortName:    manipulatorCommonInterface_Middle
 	Description: 
 	Interface:   
 		[Service Consumer Interfaces]
-		Name:          JARA_ARM::ManipulatorCommonInterface_Middle
+		Name:          manipulatorCommonInterface_Middle
 		Type:          JARA_ARM::ManipulatorCommonInterface_Middle
 		Description:   
 		Argument:      

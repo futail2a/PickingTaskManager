@@ -9,8 +9,9 @@ CUIApp::CUIApp(PickingTaskManager* compPtr)
 	m_robotID = new Manipulation::RobotIdentifier();
 	m_robotJoint = new Manipulation::RobotJointInfo();
 
-	m_startRobotJointInfo = new Manipulation::RobotJointInfo();
-	m_goalRobotJointInfo = new Manipulation::RobotJointInfo();
+	m_currentRobotJointAngles = new Manipulation::JointAngleSeq();
+	m_startRobotJointAngles = new Manipulation::JointAngleSeq();
+	m_goalRobotJointAngles = new Manipulation::JointAngleSeq();
 	m_manipPlan = new Manipulation::ManipulationPlan();
 
 	m_rtc = compPtr;
@@ -27,7 +28,6 @@ void CUIApp::detectObj(){
 
 	try{
 		m_rtc->callDetectObject((*m_objectID), m_objInfo);
-		m_rtc->callSolveInverseKinematics((*m_objInfo), m_goalRobotJointInfo);
 	}catch(CORBA::SystemException &e){
 		std::cout << "Port Not Connected" <<std::endl;
 	}
@@ -39,11 +39,10 @@ void CUIApp::searchMotionPlan(){
 	std::cout << "--Motion Plannig--" << std::endl;
 
 	std::cout << "Solve grasping position" << std::endl;
-	m_rtc->callSolveInverseKinematics((*m_objInfo), m_goalRobotJointInfo);
+	m_rtc->callSolveInverseKinematics((*m_targetPose), (*m_startRobotJointAngles), m_currentRobotJointAngles);
 
-	m_rtc->callGetCurrentRobotJointInfo((*m_robotID), m_robotJoint);
-	m_rtc->callPlanManipulation((*m_robotID), (*m_startRobotJointInfo), (*m_goalRobotJointInfo), m_manipPlan);
-
+	m_rtc->callGetCurrentRobotJointAngles(m_currentRobotJointAngles);
+	m_rtc->callPlanManipulation((*m_robotID), (*m_currentRobotJointAngles), (*m_goalRobotJointAngles), m_manipPlan);
 
 }
 
@@ -55,15 +54,15 @@ void CUIApp::generateMotionPlan(){
 
 void CUIApp::showParams(){
 	std::cout << "Current motion plan" << std::endl;
-	for (int i = 0; i<m_manipPlan->robotJointInfoSeq.length(); i++){
-		for (int j = 0; j<m_manipPlan->robotJointInfoSeq[i].jointInfoSeq.length(); j++){
-			std::cout << m_manipPlan->robotJointInfoSeq[i].jointInfoSeq[j].jointAngle << " ";
+	for (int i = 0; i<m_manipPlan->manipPath.length(); i++){
+		for (int j = 0; j<m_manipPlan->manipPath[i].length(); j++){
+			std::cout << m_manipPlan->manipPath[i][j].data << " ";
 		}
 	std::cout << std::endl;
 	}
 }
 
-//for debugging
+/*
 void CUIApp::setSampleManipPlan(){
 	std::cout << "Generate motion from a csv file" << std::endl;
 
@@ -98,3 +97,4 @@ void CUIApp::setSampleManipPlan(){
 	//std::cout << "Test solving kinematics.." << std::endl;
 	//m_KinematicsSolverService->solveInverseKinematics((*m_objInfo), m_goalRobotJointInfo);
 }
+*/

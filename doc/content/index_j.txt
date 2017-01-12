@@ -112,7 +112,7 @@ ObjectDetectionService ServicePort Manipulation::ObjectDetectionService
 ManipulationPlannerService ServicePort Manipulation::ManipulationPlannerService 
 KinematicsSolverService ServicePort Manipulation::KinematicSolverService 
 MotionGeneratorService ServicePort Manipulation::MotionGeneratorService 
-JARA_ARM::ManipulatorCommonInterface_Middle ServicePort JARA_ARM::ManipulatorCommonInterface_Middle 
+manipulatorCommonInterface_Middle ServicePort JARA_ARM::ManipulatorCommonInterface_Middle 
 ObjectHandleStrategyService ServicePort Manipulation::ObjectHandleStrategyService 
 =============== =========== ============================== ====
 

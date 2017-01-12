@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <rtc:RtcProfile rtc:version="0.2" rtc:id="RTC:ogata-lab:Category:PickingTaskManager:1.0.0" xmlns:rtc="http://www.openrtp.org/namespaces/rtc" xmlns:rtcExt="http://www.openrtp.org/namespaces/rtc_ext" xmlns:rtcDoc="http://www.openrtp.org/namespaces/rtc_doc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <rtc:BasicInfo xsi:type="rtcExt:basic_info_ext" rtcExt:saveProject="PickingTaskManager" rtc:updateDate="2017-01-12T17:11:26.624+09:00" rtc:creationDate="2016-12-16T15:11:05+09:00" rtc:version="1.0.0" rtc:vendor="ogata-lab" rtc:maxInstances="1" rtc:executionType="PeriodicExecutionContext" rtc:executionRate="1000.0" rtc:description="ModuleDescription" rtc:category="Category" rtc:componentKind="DataFlowComponent" rtc:activityType="PERIODIC" rtc:componentType="STATIC" rtc:name="PickingTaskManager">
+    <rtc:BasicInfo xsi:type="rtcExt:basic_info_ext" rtcExt:saveProject="PickingTaskManager" rtc:updateDate="2017-01-12T20:32:19.468+09:00" rtc:creationDate="2016-12-16T15:11:05+09:00" rtc:version="1.0.0" rtc:vendor="ogata-lab" rtc:maxInstances="1" rtc:executionType="PeriodicExecutionContext" rtc:executionRate="1000.0" rtc:description="ModuleDescription" rtc:category="Category" rtc:componentKind="DataFlowComponent" rtc:activityType="PERIODIC" rtc:componentType="STATIC" rtc:name="PickingTaskManager">
         <rtcExt:VersionUpLogs></rtcExt:VersionUpLogs>
     </rtc:BasicInfo>
     <rtc:Actions>
@@ -31,8 +31,8 @@
     <rtc:ServicePorts xsi:type="rtcExt:serviceport_ext" rtcExt:position="LEFT" rtc:name="MotionGeneratorService">
         <rtc:ServiceInterface xsi:type="rtcExt:serviceinterface_ext" rtcExt:variableName="" rtc:path="/home/ogata/workspace/ManipulationPlanner_OMPL/idl" rtc:type="Manipulation::MotionGeneratorService" rtc:idlFile="/home/ogata/workspace/ManipulationPlanner_OMPL/idl/TrajectoryPlanner.idl" rtc:instanceName="" rtc:direction="Required" rtc:name="MotionGeneratorService"/>
     </rtc:ServicePorts>
-    <rtc:ServicePorts xsi:type="rtcExt:serviceport_ext" rtcExt:position="LEFT" rtc:name="JARA_ARM::ManipulatorCommonInterface_Middle">
-        <rtc:ServiceInterface xsi:type="rtcExt:serviceinterface_ext" rtcExt:variableName="" rtc:path="/home/ogata/workspace/ManipulatorMotionGenerator/idl" rtc:type="JARA_ARM::ManipulatorCommonInterface_Middle" rtc:idlFile="/home/ogata/workspace/ManipulatorMotionGenerator/idl/ManipulatorCommonInterface_MiddleLevel.idl" rtc:instanceName="" rtc:direction="Required" rtc:name="JARA_ARM::ManipulatorCommonInterface_Middle"/>
+    <rtc:ServicePorts xsi:type="rtcExt:serviceport_ext" rtcExt:position="LEFT" rtc:name="manipulatorCommonInterface_Middle">
+        <rtc:ServiceInterface xsi:type="rtcExt:serviceinterface_ext" rtcExt:variableName="" rtc:path="/home/ogata/workspace/ManipulatorMotionGenerator/idl" rtc:type="JARA_ARM::ManipulatorCommonInterface_Middle" rtc:idlFile="/home/ogata/workspace/ManipulatorMotionGenerator/idl/ManipulatorCommonInterface_MiddleLevel.idl" rtc:instanceName="" rtc:direction="Required" rtc:name="manipulatorCommonInterface_Middle"/>
     </rtc:ServicePorts>
     <rtc:ServicePorts xsi:type="rtcExt:serviceport_ext" rtcExt:position="LEFT" rtc:name="ObjectHandleStrategyService">
         <rtc:ServiceInterface xsi:type="rtcExt:serviceinterface_ext" rtcExt:variableName="" rtc:path="/home/ogata/workspace/PickingTaskManager/idl" rtc:type="Manipulation::ObjectHandleStrategyService" rtc:idlFile="/home/ogata/workspace/PickingTaskManager/idl/TrajectoryPlanner.idl" rtc:instanceName="" rtc:direction="Required" rtc:name="ObjectHandleStrategyService"/>

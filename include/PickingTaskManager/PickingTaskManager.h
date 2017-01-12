@@ -263,7 +263,7 @@ class PickingTaskManager
   RTC::CorbaPort m_MotionGeneratorServicePort;
   /*!
    */
-  RTC::CorbaPort m_JARA_ARM::ManipulatorCommonInterface_MiddlePort;
+  RTC::CorbaPort m_manipulatorCommonInterface_MiddlePort;
   /*!
    */
   RTC::CorbaPort m_ObjectHandleStrategyServicePort;
@@ -291,7 +291,7 @@ class PickingTaskManager
   RTC::CorbaConsumer<Manipulation::MotionGeneratorService> m_MotionGeneratorService;
   /*!
    */
-  RTC::CorbaConsumer<JARA_ARM::ManipulatorCommonInterface_Middle> m_JARA_ARM::ManipulatorCommonInterface_Middle;
+  RTC::CorbaConsumer<JARA_ARM::ManipulatorCommonInterface_Middle> m_manipulatorCommonInterface_Middle;
   /*!
    */
   RTC::CorbaConsumer<Manipulation::ObjectHandleStrategyService> m_ObjectHandleStrategyService;
@@ -310,12 +310,11 @@ class PickingTaskManager
 	 CUIApp* m_app;
 
  public:
-	 void callDetectObject(const Manipulation::ObjectIdentifier& objectID, Manipulation::ObjectInfo_out objInfo);
-	 void callSolveInverseKinematics(const Manipulation::ObjectInfo& objInfo, Manipulation::RobotJointInfo_out goalRobotJointInfo);
-	 void callGetCurrentRobotJointInfo(const Manipulation::RobotIdentifier& robotID, Manipulation::RobotJointInfo_out robotJoint);
-	 void callPlanManipulation(const Manipulation::RobotIdentifier& robotID, const Manipulation::RobotJointInfo& startRobotJointInfo, const Manipulation::RobotJointInfo& goalRobotJointInfo, Manipulation::ManipulationPlan_out manipPlan);
-	 void callFollowManipPlan(const Manipulation::ManipulationPlan& manipPlan);
-
+	 Manipulation::ReturnValue* callDetectObject(const Manipulation::ObjectIdentifier& objectID, Manipulation::ObjectInfo_out objInfo);
+	 Manipulation::ReturnValue* callSolveInverseKinematics(const Manipulation::EndEffectorPose& targetPose, Manipulation::JointAngleSeq startJointAngles, Manipulation::JointAngleSeq_out targetJointAngles);
+	 Manipulation::ReturnValue* callGetCurrentRobotJointAngles(Manipulation::JointAngleSeq_out jointAngles);
+	 Manipulation::ReturnValue* callPlanManipulation(const Manipulation::RobotIdentifier& robotID, const Manipulation::JointAngleSeq& startJointAngles, const Manipulation::JointAngleSeq& goalJointAngles, Manipulation::ManipulationPlan_out manipPlan);
+	 Manipulation::ReturnValue* callFollowManipPlan(const Manipulation::ManipulationPlan& manipPlan);
 };
 
 

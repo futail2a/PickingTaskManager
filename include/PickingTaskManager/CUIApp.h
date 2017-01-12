@@ -18,7 +18,7 @@ public:
 	void showParams();
 
 	//for debugging only, delete this function before release
-	void setSampleManipPlan();
+	//void setSampleManipPlan();
 
 private:
 	Manipulation::ObjectIdentifier* m_objectID;
@@ -27,9 +27,11 @@ private:
 	Manipulation::RobotIdentifier* m_robotID;
 	Manipulation::RobotJointInfo* m_robotJoint;
 
-	Manipulation::RobotJointInfo* m_startRobotJointInfo;
-	Manipulation::RobotJointInfo* m_goalRobotJointInfo;
+	Manipulation::JointAngleSeq* m_currentRobotJointAngles;
+	Manipulation::JointAngleSeq* m_startRobotJointAngles;
+	Manipulation::JointAngleSeq* m_goalRobotJointAngles;
 	Manipulation::ManipulationPlan* m_manipPlan;
+	Manipulation::EndEffectorPose*  m_targetPose;
 	
 	PickingTaskManager* m_rtc;
 };

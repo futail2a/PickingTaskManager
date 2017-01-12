@@ -43,7 +43,7 @@ PickingTaskManager::PickingTaskManager(RTC::Manager* manager)
     m_ManipulationPlannerServicePort("ManipulationPlannerService"),
     m_KinematicsSolverServicePort("KinematicsSolverService"),
     m_MotionGeneratorServicePort("MotionGeneratorService"),
-    m_JARA_ARM::ManipulatorCommonInterface_MiddlePort("JARA_ARM::ManipulatorCommonInterface_Middle"),
+    m_manipulatorCommonInterface_MiddlePort("manipulatorCommonInterface_Middle"),
     m_ObjectHandleStrategyServicePort("ObjectHandleStrategyService")
 
     // </rtc-template>
@@ -74,7 +74,7 @@ RTC::ReturnCode_t PickingTaskManager::onInitialize()
   m_ManipulationPlannerServicePort.registerConsumer("ManipulationPlannerService", "Manipulation::ManipulationPlannerService", m_ManipulationPlannerService);
   m_KinematicsSolverServicePort.registerConsumer("KinematicsSolverService", "Manipulation::KinematicSolverService", m_KinematicsSolverService);
   m_MotionGeneratorServicePort.registerConsumer("MotionGeneratorService", "Manipulation::MotionGeneratorService", m_MotionGeneratorService);
-  m_JARA_ARM::ManipulatorCommonInterface_MiddlePort.registerConsumer("JARA_ARM::ManipulatorCommonInterface_Middle", "JARA_ARM::ManipulatorCommonInterface_Middle", m_JARA_ARM::ManipulatorCommonInterface_Middle);
+  m_manipulatorCommonInterface_MiddlePort.registerConsumer("manipulatorCommonInterface_Middle", "JARA_ARM::ManipulatorCommonInterface_Middle", m_manipulatorCommonInterface_Middle);
   m_ObjectHandleStrategyServicePort.registerConsumer("ObjectHandleStrategyService", "Manipulation::ObjectHandleStrategyService", m_ObjectHandleStrategyService);
   
   // Set CORBA Service Ports
@@ -82,7 +82,7 @@ RTC::ReturnCode_t PickingTaskManager::onInitialize()
   addPort(m_ManipulationPlannerServicePort);
   addPort(m_KinematicsSolverServicePort);
   addPort(m_MotionGeneratorServicePort);
-  addPort(m_JARA_ARM::ManipulatorCommonInterface_MiddlePort);
+  addPort(m_manipulatorCommonInterface_MiddlePort);
   addPort(m_ObjectHandleStrategyServicePort);
   
   // </rtc-template>
@@ -159,12 +159,12 @@ RTC::ReturnCode_t PickingTaskManager::onExecute(RTC::UniqueId ec_id)
 	  std::cout << "s: show current parameters" << std::endl;
 
 	  std::cout << "h: help" << std::endl;
-	  std::cout << "c: generate motion form csv" << std::endl;
+	  //std::cout << "c: generate motion form csv" << std::endl;
 	  break;
 
-  case 'c':
-	  m_app->setSampleManipPlan();
-	  break;
+  //case 'c':
+	  //m_app->setSampleManipPlan();
+	  //break;
   }
 
   return RTC::RTC_OK;
@@ -205,24 +205,24 @@ RTC::ReturnCode_t PickingTaskManager::onRateChanged(RTC::UniqueId ec_id)
 }
 */
 
-void PickingTaskManager::callDetectObject(const Manipulation::ObjectIdentifier& objectID, Manipulation::ObjectInfo_out objInfo){
-	m_ObjectDetectionService->detectObject(objectID, objInfo);
+Manipulation::ReturnValue* PickingTaskManager::callDetectObject(const Manipulation::ObjectIdentifier& objectID, Manipulation::ObjectInfo_out objInfo){
+	return m_ObjectDetectionService->detectObject(objectID, objInfo);
 }
 
-void PickingTaskManager::callSolveInverseKinematics(const Manipulation::ObjectInfo& objInfo, Manipulation::RobotJointInfo_out goalRobotJointInfo){
-	m_KinematicsSolverService->solveInverseKinematics(objInfo, goalRobotJointInfo);
+Manipulation::ReturnValue* PickingTaskManager::callSolveInverseKinematics(const Manipulation::EndEffectorPose& targetPose, Manipulation::JointAngleSeq startJointAngles, Manipulation::JointAngleSeq_out targetJointAngles){
+	return m_KinematicsSolverService->solveKinematics(targetPose, startJointAngles, targetJointAngles);
 }
 
-void PickingTaskManager::callGetCurrentRobotJointInfo(const Manipulation::RobotIdentifier& robotID, Manipulation::RobotJointInfo_out robotJoint){
-	m_MotionGeneratorService->getCurrentRobotJointInfo(robotID, robotJoint);
+Manipulation::ReturnValue* PickingTaskManager::callGetCurrentRobotJointAngles(Manipulation::JointAngleSeq_out jointAngles){
+	return m_MotionGeneratorService->getCurrentRobotJointAngles(jointAngles);
 }
 
-void PickingTaskManager::callPlanManipulation(const Manipulation::RobotIdentifier& robotID, const Manipulation::RobotJointInfo& startRobotJointInfo, const Manipulation::RobotJointInfo& goalRobotJointInfo, Manipulation::ManipulationPlan_out manipPlan){
-	m_ManipulationPlannerService->planManipulation(robotID, startRobotJointInfo, goalRobotJointInfo, manipPlan);
+Manipulation::ReturnValue* PickingTaskManager::callPlanManipulation(const Manipulation::RobotIdentifier& robotID, const Manipulation::JointAngleSeq& startJointAngles, const Manipulation::JointAngleSeq& goalJointAngles, Manipulation::ManipulationPlan_out manipPlan){
+	return m_ManipulationPlannerService->planManipulation(robotID, startJointAngles, goalJointAngles, manipPlan);
 }
 
-void PickingTaskManager::callFollowManipPlan(const Manipulation::ManipulationPlan& manipPlan){
-	m_MotionGeneratorService->followManipPlan(manipPlan);
+Manipulation::ReturnValue* PickingTaskManager::callFollowManipPlan(const Manipulation::ManipulationPlan& manipPlan){
+	return m_MotionGeneratorService->followManipPlan(manipPlan);
 }
 
 extern "C"
