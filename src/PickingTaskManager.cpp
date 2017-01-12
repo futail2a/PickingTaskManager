@@ -209,7 +209,7 @@ Manipulation::ReturnValue* PickingTaskManager::callDetectObject(const Manipulati
 	return m_ObjectDetectionService->detectObject(objectID, objInfo);
 }
 
-Manipulation::ReturnValue* PickingTaskManager::callSolveInverseKinematics(const Manipulation::EndEffectorPose& targetPose, Manipulation::JointAngleSeq startJointAngles, Manipulation::JointAngleSeq_out targetJointAngles){
+Manipulation::ReturnValue* PickingTaskManager::callSolveKinematics(const Manipulation::EndEffectorPose& targetPose, Manipulation::JointAngleSeq startJointAngles, Manipulation::JointAngleSeq_out targetJointAngles){
 	return m_KinematicsSolverService->solveKinematics(targetPose, startJointAngles, targetJointAngles);
 }
 
@@ -224,6 +224,11 @@ Manipulation::ReturnValue* PickingTaskManager::callPlanManipulation(const Manipu
 Manipulation::ReturnValue* PickingTaskManager::callFollowManipPlan(const Manipulation::ManipulationPlan& manipPlan){
 	return m_MotionGeneratorService->followManipPlan(manipPlan);
 }
+
+Manipulation::ReturnValue* PickingTaskManager::callGetApproachOrientation(const Manipulation::ObjectInfo& objInfo, Manipulation::EndEffectorPose_out eePos){
+	return m_ObjectHandleStrategyService->getApproachOrientation(objInfo, eePos);
+}
+
 
 extern "C"
 {

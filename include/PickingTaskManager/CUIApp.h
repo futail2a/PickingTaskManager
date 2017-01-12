@@ -13,6 +13,8 @@ public:
 	~CUIApp();
 
 	void detectObj();
+	void determineApproachPose();
+	void solveKinematics();
 	void searchMotionPlan();
 	void generateMotionPlan();
 	void showParams();
