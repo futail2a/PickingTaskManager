@@ -23,17 +23,17 @@ public:
 	//void setSampleManipPlan();
 
 private:
-	Manipulation::ObjectIdentifier* m_objectID;
-	Manipulation::ObjectInfo* m_objInfo;
+	Manipulation::ObjectIdentifier_var m_objectID;
+	Manipulation::ObjectInfo_var m_objInfo;
 
-	Manipulation::RobotIdentifier* m_robotID;
-	Manipulation::RobotJointInfo* m_robotJoint;
+	Manipulation::RobotIdentifier_var m_robotID;
+	Manipulation::RobotJointInfo_var m_robotJoint;
 
-	Manipulation::JointAngleSeq* m_currentRobotJointAngles;
-	Manipulation::JointAngleSeq* m_startRobotJointAngles;
-	Manipulation::JointAngleSeq* m_goalRobotJointAngles;
-	Manipulation::ManipulationPlan* m_manipPlan;
-	Manipulation::EndEffectorPose*  m_targetPose;
+	Manipulation::JointAngleSeq_var m_currentRobotJointAngles;
+	Manipulation::JointAngleSeq_var m_startRobotJointAngles;
+	Manipulation::JointAngleSeq_var m_goalRobotJointAngles;
+	Manipulation::ManipulationPlan_var m_manipPlan;
+	Manipulation::EndEffectorPose_var  m_targetPose;
 	
 	PickingTaskManager* m_rtc;
 };

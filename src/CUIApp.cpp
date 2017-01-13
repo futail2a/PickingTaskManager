@@ -13,7 +13,7 @@ CUIApp::CUIApp(PickingTaskManager* compPtr)
 	m_startRobotJointAngles = new Manipulation::JointAngleSeq();
 	m_goalRobotJointAngles = new Manipulation::JointAngleSeq();
 	m_manipPlan = new Manipulation::ManipulationPlan();
-	m_targetPose = new Manipulation::EndEffectorPose();
+	m_targetPose = new Manipulation::EndEffectorPose;
 
 	m_rtc = compPtr;
 }
@@ -28,7 +28,7 @@ void CUIApp::detectObj(){
 	m_objectID->name = CORBA::string_dup(name.c_str());
 
 	try{
-		m_rtc->callDetectObject((*m_objectID), m_objInfo);
+		m_rtc->callDetectObject(m_objectID, m_objInfo);
 		determineApproachPose();
 	}catch(CORBA::SystemException &e){
 		std::cout << "Port Not Connected" <<std::endl;
@@ -38,23 +38,23 @@ void CUIApp::detectObj(){
 }
 
 void CUIApp::determineApproachPose(){
-	m_rtc->callGetApproachOrientation((*m_objInfo), m_targetPose);
+	m_rtc->callGetApproachOrientation(m_objInfo, m_targetPose);
 }
 void CUIApp::solveKinematics(){
 	m_rtc->callGetCurrentRobotJointAngles(m_currentRobotJointAngles);
-	m_rtc->callSolveKinematics((*m_targetPose), (*m_currentRobotJointAngles), m_startRobotJointAngles);
+	m_rtc->callSolveKinematics(m_targetPose, m_currentRobotJointAngles, m_startRobotJointAngles);
 }
 
 
 void CUIApp::searchMotionPlan(){
 	std::cout << "--Motion Plannig--" << std::endl;
 	solveKinematics();
-	m_rtc->callPlanManipulation((*m_robotID), (*m_currentRobotJointAngles), (*m_goalRobotJointAngles), m_manipPlan);
+	m_rtc->callPlanManipulation(m_robotID, m_currentRobotJointAngles, m_goalRobotJointAngles, m_manipPlan);
 }
 
 void CUIApp::generateMotionPlan(){
 	std::cout << "--Motion Generation--" << std::endl;
-	m_rtc->callFollowManipPlan((*m_manipPlan));
+	m_rtc->callFollowManipPlan(m_manipPlan);
 	//TODO:open and close grip
 }
 

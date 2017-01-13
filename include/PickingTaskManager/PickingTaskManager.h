@@ -311,9 +311,11 @@ class PickingTaskManager
 
  public:
 	 Manipulation::ReturnValue* callDetectObject(const Manipulation::ObjectIdentifier& objectID, Manipulation::ObjectInfo_out objInfo);
-	 Manipulation::ReturnValue* callSolveKinematics(const Manipulation::EndEffectorPose& targetPose, Manipulation::JointAngleSeq startJointAngles, Manipulation::JointAngleSeq_out targetJointAngles);
+	 Manipulation::ReturnValue* callSolveKinematics(const Manipulation::EndEffectorPose& targetPose, Manipulation::JointAngleSeq startJointAngles,
+			 	 	 	 	 	 	 	 	 	 Manipulation::JointAngleSeq_out targetJointAngles);
 	 Manipulation::ReturnValue* callGetCurrentRobotJointAngles(Manipulation::JointAngleSeq_out jointAngles);
-	 Manipulation::ReturnValue* callPlanManipulation(const Manipulation::RobotIdentifier& robotID, const Manipulation::JointAngleSeq& startJointAngles, const Manipulation::JointAngleSeq& goalJointAngles, Manipulation::ManipulationPlan_out manipPlan);
+	 Manipulation::ReturnValue* callPlanManipulation(const Manipulation::RobotIdentifier& robotID, const Manipulation::JointAngleSeq& startJointAngles,
+			 	 	 	 	 	 	 	 	 	 	 const Manipulation::JointAngleSeq& goalJointAngles, Manipulation::ManipulationPlan_out manipPlan);
 	 Manipulation::ReturnValue* callFollowManipPlan(const Manipulation::ManipulationPlan& manipPlan);
 	 Manipulation::ReturnValue* callGetApproachOrientation(const Manipulation::ObjectInfo& objInfo, Manipulation::EndEffectorPose_out eePos);
 };

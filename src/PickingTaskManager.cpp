@@ -209,7 +209,8 @@ Manipulation::ReturnValue* PickingTaskManager::callDetectObject(const Manipulati
 	return m_ObjectDetectionService->detectObject(objectID, objInfo);
 }
 
-Manipulation::ReturnValue* PickingTaskManager::callSolveKinematics(const Manipulation::EndEffectorPose& targetPose, Manipulation::JointAngleSeq startJointAngles, Manipulation::JointAngleSeq_out targetJointAngles){
+Manipulation::ReturnValue* PickingTaskManager::callSolveKinematics(const Manipulation::EndEffectorPose& targetPose, Manipulation::JointAngleSeq startJointAngles,
+																   Manipulation::JointAngleSeq_out targetJointAngles){
 	return m_KinematicsSolverService->solveKinematics(targetPose, startJointAngles, targetJointAngles);
 }
 
@@ -217,7 +218,8 @@ Manipulation::ReturnValue* PickingTaskManager::callGetCurrentRobotJointAngles(Ma
 	return m_MotionGeneratorService->getCurrentRobotJointAngles(jointAngles);
 }
 
-Manipulation::ReturnValue* PickingTaskManager::callPlanManipulation(const Manipulation::RobotIdentifier& robotID, const Manipulation::JointAngleSeq& startJointAngles, const Manipulation::JointAngleSeq& goalJointAngles, Manipulation::ManipulationPlan_out manipPlan){
+Manipulation::ReturnValue* PickingTaskManager::callPlanManipulation(const Manipulation::RobotIdentifier& robotID, const Manipulation::JointAngleSeq& startJointAngles,
+																	const Manipulation::JointAngleSeq& goalJointAngles, Manipulation::ManipulationPlan_out manipPlan){
 	return m_ManipulationPlannerService->planManipulation(robotID, startJointAngles, goalJointAngles, manipPlan);
 }
 
