@@ -29,7 +29,8 @@ void CUIApp::detectObj(){
 
 	try{
 		m_rtc->callDetectObject(m_objectID, m_objInfo);
-		determineApproachPose();
+		std::cout <<"obj x:"<< m_objInfo->pose.position.x<<" obj y:" <<m_objInfo->pose.position.y <<" obj z:"<< m_objInfo->pose.position.z << std::endl;
+		std::cout <<"obj p:"<< m_objInfo->pose.orientation.p<<" obj r:" <<m_objInfo->pose.orientation.r <<" obj y:"<< m_objInfo->pose.orientation.y << std::endl;
 	}catch(CORBA::SystemException &e){
 		std::cout << "Port Not Connected" <<std::endl;
 	}
@@ -39,6 +40,8 @@ void CUIApp::detectObj(){
 
 void CUIApp::determineApproachPose(){
 	m_rtc->callGetApproachOrientation(m_objInfo, m_targetPose);
+	std::cout <<"obj x:"<< m_targetPose->pose.position.x<<" obj y:" <<m_targetPose->pose.position.y <<" obj z:"<< m_targetPose->pose.position.z << std::endl;
+	std::cout <<"obj p:"<< m_targetPose->pose.orientation.p<<" obj r:" <<m_targetPose->pose.orientation.r <<" obj y:"<< m_targetPose->pose.orientation.y << std::endl;
 }
 void CUIApp::solveKinematics(){
 	m_rtc->callGetCurrentRobotJointAngles(m_currentRobotJointAngles);

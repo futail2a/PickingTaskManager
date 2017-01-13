@@ -140,6 +140,9 @@ RTC::ReturnCode_t PickingTaskManager::onExecute(RTC::UniqueId ec_id)
 	  m_app->detectObj();
 	  break;
 
+  case 'e':
+	  m_app->determineApproachPose();
+
   case 'p':
 	  m_app->searchMotionPlan();
 	  break;
