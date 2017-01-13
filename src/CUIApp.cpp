@@ -49,7 +49,7 @@ void CUIApp::solveKinematics(){
 void CUIApp::searchMotionPlan(){
 	std::cout << "--Motion Plannig--" << std::endl;
 	solveKinematics();
-	m_rtc->callPlanManipulation(m_robotID, m_currentRobotJointAngles, m_goalRobotJointAngles, m_manipPlan);
+	m_rtc->callPlanManipulation(m_robotID, m_startRobotJointAngles, m_goalRobotJointAngles, m_manipPlan);
 }
 
 void CUIApp::generateMotionPlan(){
