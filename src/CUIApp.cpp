@@ -34,16 +34,16 @@ void CUIApp::detectObj(){
 	}catch(CORBA::SystemException &e){
 		std::cout << "Port Not Connected" <<std::endl;
 	}
-
-	//CORBA::string_free(m_objectID->name);
 }
 
 void CUIApp::determineApproachPose(){
 	m_rtc->callGetApproachOrientation(m_objInfo, m_targetPose);
-	std::cout <<"obj x:"<< m_targetPose->pose.position.x<<" obj y:" <<m_targetPose->pose.position.y <<" obj z:"<< m_targetPose->pose.position.z << std::endl;
-	std::cout <<"obj p:"<< m_targetPose->pose.orientation.p<<" obj r:" <<m_targetPose->pose.orientation.r <<" obj y:"<< m_targetPose->pose.orientation.y << std::endl;
+	std::cout <<"ee x:"<< m_targetPose->pose.position.x<<" ee y:" <<m_targetPose->pose.position.y <<" ee z:"<< m_targetPose->pose.position.z << std::endl;
+	std::cout <<"ee p:"<< m_targetPose->pose.orientation.p<<" ee r:" <<m_targetPose->pose.orientation.r <<" ee y:"<< m_targetPose->pose.orientation.y << std::endl;
 }
+
 void CUIApp::solveKinematics(){
+	//m_currentRobotJointAngles->length(7);
 	m_rtc->callGetCurrentRobotJointAngles(m_currentRobotJointAngles);
 	m_rtc->callSolveKinematics(m_targetPose, m_currentRobotJointAngles, m_startRobotJointAngles);
 }
@@ -51,7 +51,8 @@ void CUIApp::solveKinematics(){
 
 void CUIApp::searchMotionPlan(){
 	std::cout << "--Motion Plannig--" << std::endl;
-	solveKinematics();
+
+	m_robotID->name = CORBA::string_dup("orochi");
 	m_rtc->callPlanManipulation(m_robotID, m_startRobotJointAngles, m_goalRobotJointAngles, m_manipPlan);
 }
 
