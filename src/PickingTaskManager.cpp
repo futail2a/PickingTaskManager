@@ -136,31 +136,33 @@ RTC::ReturnCode_t PickingTaskManager::onExecute(RTC::UniqueId ec_id)
   std::cin >>c;
 
   switch(c){
-  case 'd':
+  case '1':
 	  m_app->detectObj();
 	  break;
 
-  case 'e':
+  case '2':
 	  m_app->determineApproachPose();
+	  break;
 
-  case 'p':
+  case'3':
+	  m_app->solveKinematics();
+	  break;
+
+  case '4':
 	  m_app->searchMotionPlan();
 	  break;
 
-  case 'g':
+  case '5':
 	  m_app->generateMotionPlan();
 	  break;
 	  
-  case's':
-	  m_app->showParams();
-	  break;
 	  
   case 'h':
-	  std::cout << "d: detect target object" << std::endl;
-	  std::cout << "p: search motion plan" << std::endl;
-	  std::cout << "g: generate motion plan" << std::endl;
-	  std::cout << "s: show current parameters" << std::endl;
-
+	  std::cout << "1: detect target object" << std::endl;
+	  std::cout << "2: determine end effector's pose" << std::endl;
+	  std::cout << "3: solce inverse kinematics" << std::endl;
+	  std::cout << "4: search path" << std::endl;
+	  std::cout << "4: follow path" << std::endl;
 	  std::cout << "h: help" << std::endl;
 	  //std::cout << "c: generate motion form csv" << std::endl;
 	  break;
