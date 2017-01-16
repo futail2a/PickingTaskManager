@@ -89,20 +89,16 @@ void CUIApp::searchMotionPlan(){
 }
 
 void  CUIApp::searchReplacingPlan(){
-	/*
+
+	//TODO: Define these parameter as configuration
 	m_replacingRobotJointAngles->length(6);
-	m_replacingRobotJointAngles[0].data=0.0;
-	m_replacingRobotJointAngles[1].data=1.10;
-	m_replacingRobotJointAngles[2].data=0.6;
-	m_replacingRobotJointAngles[3].data=0.14;
-	m_replacingRobotJointAngles[4].data=0.341;
+	m_replacingRobotJointAngles[0].data=-1.5;
+	m_replacingRobotJointAngles[1].data=1.0;
+	m_replacingRobotJointAngles[2].data=1.0;
+	m_replacingRobotJointAngles[3].data=0.0;
+	m_replacingRobotJointAngles[4].data=-0.5;
 	m_replacingRobotJointAngles[5].data=0.0;
-	*/
-	std::cout << "Input replacing robot pose" << std::endl;
-	for(int i=0; i<m_startRobotJointAngles->length();i++){
-		std::cout << i << "Joint angle" << std::endl;
-		std::cin >> m_replacingRobotJointAngles[i].data;
-	}
+
 
 	std::cout << "--Motion Plannig: Replacing--" << std::endl;
 	//m_robotID->name = CORBA::string_dup("orochi");
@@ -131,12 +127,13 @@ void CUIApp::generateMotionPlan(){
 	m_rtc->callFollowManipPlan(m_invManipPlan);
 
 	std::cout << "--Move to Cargo--" << std::endl;
-	/*searchReplacingPlan();
+	searchReplacingPlan();
 	m_rtc->callFollowManipPlan(m_replacingPlan);
 	m_rtc->callOpenGripper();
-*/
+
 	std::cout << "--Move to Initial Pose--" << std::endl;
-	//m_rtc->callFollowManipPlan(inversePlan(m_replacingPlan));
+	m_invReplacingPlan = inversePlan(m_replacingPlan);
+	m_rtc->callFollowManipPlan(m_invReplacingPlan);
 }
 
 Manipulation::ManipulationPlan* CUIApp::inversePlan(const Manipulation::ManipulationPlan& plan){
