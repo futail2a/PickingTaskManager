@@ -86,7 +86,7 @@ module Manipulation {
   };
   
   struct ReturnValue {
-    RETURN_ID id;
+    RETURN_ID returnID;
     string message;
   };
 

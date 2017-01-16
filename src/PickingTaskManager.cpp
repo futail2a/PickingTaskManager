@@ -239,6 +239,13 @@ Manipulation::ReturnValue* PickingTaskManager::callGetApproachOrientation(const 
 	return m_ObjectHandleStrategyService->getApproachOrientation(objInfo, eePos);
 }
 
+void PickingTaskManager::callMoveGripper(const int degree){
+        m_manipulatorCommonInterface_Middle->moveGripper(degree);
+}
+
+void PickingTaskManager::callOpenGripper(){
+        m_manipulatorCommonInterface_Middle->closeGripper();
+}
 
 extern "C"
 {

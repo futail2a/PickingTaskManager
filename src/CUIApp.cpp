@@ -26,13 +26,24 @@ void CUIApp::detectObj(){
 
 	m_objectID->name = CORBA::string_dup(name.c_str());
 
+	m_objInfo->objectID.name = CORBA::string_dup(name.c_str());
+	m_objInfo->pose.position.x =0.0;
+    m_objInfo->pose.position.y =0.0;
+	m_objInfo->pose.position.z =0.0;
+	m_objInfo->pose.orientation.p =0.0;
+	m_objInfo->pose.orientation.r =0.0;
+	m_objInfo->pose.orientation.y =0.0;
+
 	try{
 		m_rtc->callDetectObject(m_objectID, m_objInfo);
-		std::cout <<"obj x:"<< m_objInfo->pose.position.x<<" obj y:" <<m_objInfo->pose.position.y <<" obj z:"<< m_objInfo->pose.position.z << std::endl;
-		std::cout <<"obj p:"<< m_objInfo->pose.orientation.p<<" obj r:" <<m_objInfo->pose.orientation.r <<" obj y:"<< m_objInfo->pose.orientation.y << std::endl;
 	}catch(CORBA::SystemException &e){
 		std::cout << "Port Not Connected" <<std::endl;
 	}
+
+		std::cout <<"obj x:"<< m_objInfo->pose.position.x<<" obj y:" <<m_objInfo->pose.position.y <<" obj z:"<< m_objInfo->pose.position.z << std::endl;
+		std::cout <<"obj p:"<< m_objInfo->pose.orientation.p<<" obj r:" <<m_objInfo->pose.orientation.r <<" obj y:"<< m_objInfo->pose.orientation.y << std::endl;
+
+	//CORBA::string_free(m_objectID->name);
 }
 
 void CUIApp::determineApproachPose(){
@@ -106,7 +117,11 @@ void CUIApp::searchMotionPlan(){
 void CUIApp::generateMotionPlan(){
 	std::cout << "--Motion Generation--" << std::endl;
 	m_rtc->callFollowManipPlan(m_manipPlan);
-	//TODO:open and close grip
+	m_rtc->callMoveGripper(70);
+	//inverse manipulation plan
+	//move to replacing pose
+	m_rtc->callOpenGripper();
+	//move to initial pose
 }
 
 void CUIApp::showParams(){
