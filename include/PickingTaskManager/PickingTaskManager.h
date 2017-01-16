@@ -324,6 +324,6 @@ class PickingTaskManager
 extern "C"
 {
   DLL_EXPORT void PickingTaskManagerInit(RTC::Manager* manager);
-};
+  };
 
 #endif // PICKINGTASKMANAGER_H
