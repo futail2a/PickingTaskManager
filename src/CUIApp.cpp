@@ -120,7 +120,7 @@ void CUIApp::searchMotionPlan(){
 
 void  CUIApp::searchReplacingPlan(){
 	std::cout << "Input replacing robot pose" << std::endl;
-	for(int i=0; i<m_startRobotJointAngles.length();i++){
+	for(int i=0; i<m_startRobotJointAngles->length();i++){
 		std::cout << i << "Joint angle" << std::endl;
 		std::cin >> m_replacingRobotJointAngles[i].data;
 	}
