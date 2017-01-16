@@ -9,7 +9,6 @@ CUIApp::CUIApp(PickingTaskManager* compPtr)
 	m_robotID = new Manipulation::RobotIdentifier();
 	m_robotJoint = new Manipulation::RobotJointInfo();
 
-	m_currentRobotJointAngles = new Manipulation::JointAngleSeq();
 	m_startRobotJointAngles = new Manipulation::JointAngleSeq();
 	m_goalRobotJointAngles = new Manipulation::JointAngleSeq();
 	m_manipPlan = new Manipulation::ManipulationPlan();
