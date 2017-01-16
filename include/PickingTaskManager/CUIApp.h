@@ -18,6 +18,7 @@ public:
 	void searchMotionPlan();
 	void generateMotionPlan();
 	void showParams();
+	void searchReplacingPlan();
 
 	//for debugging only, delete this function before release
 	//void setSampleManipPlan();
@@ -31,10 +32,16 @@ private:
 
 	Manipulation::JointAngleSeq_var m_startRobotJointAngles;
 	Manipulation::JointAngleSeq_var m_goalRobotJointAngles;
+	Manipulation::JointAngleSeq_var m_replacingRobotJointAngles;//TODO: configuration
+
 	Manipulation::ManipulationPlan_var m_manipPlan;
+	Manipulation::ManipulationPlan_var m_replacingPlan;
 	Manipulation::EndEffectorPose_var  m_targetPose;
 	
 	PickingTaskManager* m_rtc;
+
+	Manipulation::ManipulationPlan_var inversePlan(const Manipulation::ManipulationPlan& path);
+
 };
 
 #endif // CUIAPP_H

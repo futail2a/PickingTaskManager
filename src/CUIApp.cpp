@@ -11,7 +11,10 @@ CUIApp::CUIApp(PickingTaskManager* compPtr)
 
 	m_startRobotJointAngles = new Manipulation::JointAngleSeq();
 	m_goalRobotJointAngles = new Manipulation::JointAngleSeq();
+	m_replacingRobotJointAngles = new Manipulation::JointAngleSeq();
+
 	m_manipPlan = new Manipulation::ManipulationPlan();
+	m_replacingPlan = new Manipulation::ManipulationPlan();
 	m_targetPose = new Manipulation::EndEffectorPose;
 
 	m_rtc = compPtr;
@@ -116,13 +119,50 @@ void CUIApp::searchMotionPlan(){
 
 void CUIApp::generateMotionPlan(){
 	std::cout << "--Motion Generation--" << std::endl;
+
+	std::cout << "--Move to Target Object--" << std::endl;
 	m_rtc->callFollowManipPlan(m_manipPlan);
+
+	std::cout << "--Try Graspping--" << std::endl;
 	m_rtc->callMoveGripper(70);
-	//inverse manipulation plan
-	//move to replacing pose
+	m_rtc->callFollowManipPlan(inversePlan(m_manipPlan));
+
+	std::cout << "--Move to Cargo--" << std::endl;
+	searchReplacingPlan();
+	m_rtc->callFollowManipPlan(m_replacingPlan);
 	m_rtc->callOpenGripper();
-	//move to initial pose
+
+	std::cout << "--Move to Initial Pose--" << std::endl;
+	m_rtc->callFollowManipPlan(inversePlan(m_replacingPlan));
 }
+
+
+void  CUIApp::searchReplacingPlan(){
+	//m_robotID->name = CORBA::string_dup("orochi");
+	m_rtc->callPlanManipulation(m_robotID, m_startRobotJointAngles, m_replacingRobotJointAngles, m_replacingPlan);
+
+	std::cout <<m_replacingPlan ->manipPath.length() << std::endl;
+	for(int i =0;i<m_replacingPlan ->manipPath.length(); i++){
+	  for(int j=0;j<m_replacingPlan ->manipPath[i].length();j++){
+		std::cout << m_replacingPlan ->manipPath[i][j].data << " ";
+	  }
+	  std::cout <<std::endl;
+	}
+
+}
+
+Manipulation::ManipulationPlan_var  CUIApp::inversePlan(const Manipulation::ManipulationPlan& plan){
+	Manipulation::ManipulationPlan_var tmp;
+	tmp->manipPath.length(plan.manipPath.length()*plan.manipPath[0].length());
+
+	for(int i=0; i<plan.manipPath.length();i++){
+		for(int j=0; j<plan.manipPath[i].length();j++){
+			tmp->manipPath[i][j].data = plan.manipPath[i][j].data;
+		}
+	}
+	return tmp._retn();
+}
+
 
 void CUIApp::showParams(){
 	std::cout << "Current motion plan" << std::endl;
