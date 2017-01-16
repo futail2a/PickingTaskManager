@@ -14,6 +14,9 @@ CUIApp::CUIApp(PickingTaskManager* compPtr)
 	m_replacingRobotJointAngles = new Manipulation::JointAngleSeq();
 
 	m_manipPlan = new Manipulation::ManipulationPlan();
+	m_invManipPlan = new Manipulation::ManipulationPlan();
+	m_invReplacingPlan = new Manipulation::ManipulationPlan();
+
 	m_replacingPlan = new Manipulation::ManipulationPlan();
 	m_targetPose = new Manipulation::EndEffectorPose;
 
@@ -51,15 +54,7 @@ void CUIApp::detectObj(){
 
 void CUIApp::determineApproachPose(){
 	std::cout << "--Generate EndEffector Pose--" << std::endl;
-        m_rtc->callGetApproachOrientation(m_objInfo, m_targetPose);
-        /*
-        m_targetPose->pose.position.x = m_objInfo->pose.position.x ;
-	m_targetPose->pose.position.y = m_objInfo->pose.position.y ;
-	m_targetPose->pose.position.z = m_objInfo->pose.position.z ;
-	m_targetPose->pose.orientation.p = m_objInfo->pose.orientation.p ;
-	m_targetPose->pose.orientation.r = m_objInfo->pose.orientation.r ;
-	m_targetPose->pose.orientation.y = m_objInfo->pose.orientation.y ;
-	*/
+    m_rtc->callGetApproachOrientation(m_objInfo, m_targetPose);
 	
 	std::cout <<"ee x:"<< m_targetPose->pose.position.x<<" ee y:" <<m_targetPose->pose.position.y <<" ee z:"<< m_targetPose->pose.position.z << std::endl;
 	std::cout <<"ee p:"<< m_targetPose->pose.orientation.p<<" ee r:" <<m_targetPose->pose.orientation.r <<" ee y:"<< m_targetPose->pose.orientation.y << std::endl;
@@ -68,42 +63,17 @@ void CUIApp::determineApproachPose(){
 void CUIApp::solveKinematics(){
 	std::cout << "--Solve Inverse Kinematics--" << std::endl;
 	m_rtc->callGetCurrentRobotJointAngles(m_startRobotJointAngles);
-        /*
-	m_currentRobotJointAngles->length(7);
-	m_currentRobotJointAngles[0].data=0.0;
-	m_currentRobotJointAngles[1].data=0.0;
-	m_currentRobotJointAngles[2].data=0.5;
-	m_currentRobotJointAngles[3].data=0.0;
-	m_currentRobotJointAngles[4].data=1.1;
-	m_currentRobotJointAngles[5].data=0.0;
-	m_currentRobotJointAngles[6].data=0.9;
-	*/
-  
-	m_rtc->callSolveKinematics(m_targetPose, m_startRobotJointAngles, m_goalRobotJointAngles);
+	std::cout << m_rtc->callSolveKinematics(m_targetPose, m_startRobotJointAngles, m_goalRobotJointAngles)->message << std::endl;
 }
 
 
 void CUIApp::searchMotionPlan(){
 	std::cout << "--Motion Plannig: Picking--" << std::endl;
-	/*
-	m_startRobotJointAngles->length(7);
-	m_startRobotJointAngles[0].data=0.0;
-	m_startRobotJointAngles[1].data=0.0;
-	m_startRobotJointAngles[2].data=0.5;
-	m_startRobotJointAngles[3].data=0.0;
-	m_startRobotJointAngles[4].data=1.1;
-	m_startRobotJointAngles[5].data=0.0;
-	m_startRobotJointAngles[6].data=0.9;
+	for(int i=0;i<6;i++){
+		std::cout << m_goalRobotJointAngles[i].data<< std::endl;
+	}
 
-	m_goalRobotJointAngles->length(7);
-	m_goalRobotJointAngles[0].data=0.0;
-	m_goalRobotJointAngles[1].data=1.10;
-	m_goalRobotJointAngles[2].data=0.6;
-	m_goalRobotJointAngles[3].data=0.14;
-	m_goalRobotJointAngles[4].data=0.341;
-	m_goalRobotJointAngles[5].data=0.0;
-	m_goalRobotJointAngles[6].data=0.9;
-	*/
+
 	
 	m_robotID->name = CORBA::string_dup("orochi");
 	m_rtc->callPlanManipulation(m_robotID, m_startRobotJointAngles, m_goalRobotJointAngles, m_manipPlan);
@@ -119,6 +89,15 @@ void CUIApp::searchMotionPlan(){
 }
 
 void  CUIApp::searchReplacingPlan(){
+	/*
+	m_replacingRobotJointAngles->length(6);
+	m_replacingRobotJointAngles[0].data=0.0;
+	m_replacingRobotJointAngles[1].data=1.10;
+	m_replacingRobotJointAngles[2].data=0.6;
+	m_replacingRobotJointAngles[3].data=0.14;
+	m_replacingRobotJointAngles[4].data=0.341;
+	m_replacingRobotJointAngles[5].data=0.0;
+	*/
 	std::cout << "Input replacing robot pose" << std::endl;
 	for(int i=0; i<m_startRobotJointAngles->length();i++){
 		std::cout << i << "Joint angle" << std::endl;
@@ -148,25 +127,30 @@ void CUIApp::generateMotionPlan(){
 
 	std::cout << "--Try Graspping--" << std::endl;
 	m_rtc->callMoveGripper(70);
-	m_rtc->callFollowManipPlan(getInversePlan(m_manipPlan));
+	m_invManipPlan = inversePlan(m_manipPlan);
+	m_rtc->callFollowManipPlan(m_invManipPlan);
 
 	std::cout << "--Move to Cargo--" << std::endl;
-	searchReplacingPlan();
+	/*searchReplacingPlan();
 	m_rtc->callFollowManipPlan(m_replacingPlan);
 	m_rtc->callOpenGripper();
-
+*/
 	std::cout << "--Move to Initial Pose--" << std::endl;
-	m_rtc->callFollowManipPlan(getInversePlan(m_replacingPlan));
+	//m_rtc->callFollowManipPlan(inversePlan(m_replacingPlan));
 }
 
-Manipulation::ManipulationPlan_var  CUIApp::getInversePlan(const Manipulation::ManipulationPlan& plan){
+Manipulation::ManipulationPlan* CUIApp::inversePlan(const Manipulation::ManipulationPlan& plan){
 	Manipulation::ManipulationPlan_var tmp;
-	tmp->manipPath.length(plan.manipPath.length()*plan.manipPath[0].length());
+	tmp = new Manipulation::ManipulationPlan();
+	tmp->manipPath.length(plan.manipPath.length()*6);
 
-	for(int i=0; i<plan.manipPath.length();i++){
+	int k =0;
+	for(int i=plan.manipPath.length()-1; i>=0;i--){
+		tmp->manipPath[k].length(plan.manipPath[i].length());
 		for(int j=0; j<plan.manipPath[i].length();j++){
-			tmp->manipPath[i][j].data = plan.manipPath[i][j].data;
+			tmp->manipPath[k][j].data = plan.manipPath[i][j].data;
 		}
+		k+=1;
 	}
 	return tmp._retn();
 }

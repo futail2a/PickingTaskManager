@@ -35,12 +35,17 @@ private:
 	Manipulation::JointAngleSeq_var m_replacingRobotJointAngles;
 
 	Manipulation::ManipulationPlan_var m_manipPlan;
+	Manipulation::ManipulationPlan_var m_invManipPlan;
+
 	Manipulation::ManipulationPlan_var m_replacingPlan;
+	Manipulation::ManipulationPlan_var m_invReplacingPlan;
+
+
 	Manipulation::EndEffectorPose_var  m_targetPose;
 	
 	PickingTaskManager* m_rtc;
 
-	Manipulation::ManipulationPlan_var getInversePlan(const Manipulation::ManipulationPlan& path);
+	Manipulation::ManipulationPlan* inversePlan(const Manipulation::ManipulationPlan& path);
 
 };
 

@@ -150,7 +150,7 @@ RTC::ReturnCode_t PickingTaskManager::onExecute(RTC::UniqueId ec_id)
 
   case '4':
 	  m_app->searchMotionPlan();
-	  m_app->searchReplacingPlan();
+	  //m_app->searchReplacingPlan();
 	  break;
 
   case '5':
