@@ -37,23 +37,71 @@ void CUIApp::detectObj(){
 }
 
 void CUIApp::determineApproachPose(){
-	m_rtc->callGetApproachOrientation(m_objInfo, m_targetPose);
+	std::cout << "--Generate EndEffector Pose--" << std::endl;
+        m_rtc->callGetApproachOrientation(m_objInfo, m_targetPose);
+        /*
+        m_targetPose->pose.position.x = m_objInfo->pose.position.x ;
+	m_targetPose->pose.position.y = m_objInfo->pose.position.y ;
+	m_targetPose->pose.position.z = m_objInfo->pose.position.z ;
+	m_targetPose->pose.orientation.p = m_objInfo->pose.orientation.p ;
+	m_targetPose->pose.orientation.r = m_objInfo->pose.orientation.r ;
+	m_targetPose->pose.orientation.y = m_objInfo->pose.orientation.y ;
+	*/
+	
 	std::cout <<"ee x:"<< m_targetPose->pose.position.x<<" ee y:" <<m_targetPose->pose.position.y <<" ee z:"<< m_targetPose->pose.position.z << std::endl;
 	std::cout <<"ee p:"<< m_targetPose->pose.orientation.p<<" ee r:" <<m_targetPose->pose.orientation.r <<" ee y:"<< m_targetPose->pose.orientation.y << std::endl;
 }
 
 void CUIApp::solveKinematics(){
-	//m_currentRobotJointAngles->length(7);
-	m_rtc->callGetCurrentRobotJointAngles(m_currentRobotJointAngles);
-	m_rtc->callSolveKinematics(m_targetPose, m_currentRobotJointAngles, m_startRobotJointAngles);
+	std::cout << "--Solve Inverse Kinematics--" << std::endl;
+	m_rtc->callGetCurrentRobotJointAngles(m_startRobotJointAngles);
+        /*
+	m_currentRobotJointAngles->length(7);
+	m_currentRobotJointAngles[0].data=0.0;
+	m_currentRobotJointAngles[1].data=0.0;
+	m_currentRobotJointAngles[2].data=0.5;
+	m_currentRobotJointAngles[3].data=0.0;
+	m_currentRobotJointAngles[4].data=1.1;
+	m_currentRobotJointAngles[5].data=0.0;
+	m_currentRobotJointAngles[6].data=0.9;
+	*/
+  
+	m_rtc->callSolveKinematics(m_targetPose, m_startRobotJointAngles, m_goalRobotJointAngles);
 }
 
 
 void CUIApp::searchMotionPlan(){
 	std::cout << "--Motion Plannig--" << std::endl;
+	/*
+	m_startRobotJointAngles->length(7);
+	m_startRobotJointAngles[0].data=0.0;
+	m_startRobotJointAngles[1].data=0.0;
+	m_startRobotJointAngles[2].data=0.5;
+	m_startRobotJointAngles[3].data=0.0;
+	m_startRobotJointAngles[4].data=1.1;
+	m_startRobotJointAngles[5].data=0.0;
+	m_startRobotJointAngles[6].data=0.9;
 
+	m_goalRobotJointAngles->length(7);
+	m_goalRobotJointAngles[0].data=0.0;
+	m_goalRobotJointAngles[1].data=1.10;
+	m_goalRobotJointAngles[2].data=0.6;
+	m_goalRobotJointAngles[3].data=0.14;
+	m_goalRobotJointAngles[4].data=0.341;
+	m_goalRobotJointAngles[5].data=0.0;
+	m_goalRobotJointAngles[6].data=0.9;
+	*/
+	
 	m_robotID->name = CORBA::string_dup("orochi");
 	m_rtc->callPlanManipulation(m_robotID, m_startRobotJointAngles, m_goalRobotJointAngles, m_manipPlan);
+	
+	std::cout <<m_manipPlan->manipPath.length() << std::endl;
+	for(int i =0;i<m_manipPlan->manipPath.length(); i++){
+	  for(int j=0;j<m_manipPlan->manipPath[i].length();j++){
+	    std::cout << m_manipPlan->manipPath[i][j].data << " ";
+	  }
+	  std::cout <<std::endl;
+	}
 }
 
 void CUIApp::generateMotionPlan(){
@@ -66,9 +114,9 @@ void CUIApp::showParams(){
 	std::cout << "Current motion plan" << std::endl;
 	for (int i = 0; i<m_manipPlan->manipPath.length(); i++){
 		for (int j = 0; j<m_manipPlan->manipPath[i].length(); j++){
-			std::cout << m_manipPlan->manipPath[i][j].data << " ";
+		  //std::cout << m_manipPlan->manipPath[i][j].data << " ";
 		}
-	std::cout << std::endl;
+		//std::cout << std::endl;
 	}
 }
 

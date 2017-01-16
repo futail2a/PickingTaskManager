@@ -29,7 +29,6 @@ private:
 	Manipulation::RobotIdentifier_var m_robotID;
 	Manipulation::RobotJointInfo_var m_robotJoint;
 
-	Manipulation::JointAngleSeq_var m_currentRobotJointAngles;
 	Manipulation::JointAngleSeq_var m_startRobotJointAngles;
 	Manipulation::JointAngleSeq_var m_goalRobotJointAngles;
 	Manipulation::ManipulationPlan_var m_manipPlan;
