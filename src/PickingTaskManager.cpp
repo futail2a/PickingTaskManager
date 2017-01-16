@@ -144,12 +144,13 @@ RTC::ReturnCode_t PickingTaskManager::onExecute(RTC::UniqueId ec_id)
 	  m_app->determineApproachPose();
 	  break;
 
-  case'3':
+  case '3':
 	  m_app->solveKinematics();
 	  break;
 
   case '4':
 	  m_app->searchMotionPlan();
+	  m_app->searchReplacingPlan();
 	  break;
 
   case '5':

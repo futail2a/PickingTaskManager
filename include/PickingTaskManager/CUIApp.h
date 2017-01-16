@@ -32,7 +32,7 @@ private:
 
 	Manipulation::JointAngleSeq_var m_startRobotJointAngles;
 	Manipulation::JointAngleSeq_var m_goalRobotJointAngles;
-	Manipulation::JointAngleSeq_var m_replacingRobotJointAngles;//TODO: configuration
+	Manipulation::JointAngleSeq_var m_replacingRobotJointAngles;
 
 	Manipulation::ManipulationPlan_var m_manipPlan;
 	Manipulation::ManipulationPlan_var m_replacingPlan;
@@ -40,7 +40,7 @@ private:
 	
 	PickingTaskManager* m_rtc;
 
-	Manipulation::ManipulationPlan_var inversePlan(const Manipulation::ManipulationPlan& path);
+	Manipulation::ManipulationPlan_var getInversePlan(const Manipulation::ManipulationPlan& path);
 
 };
 
