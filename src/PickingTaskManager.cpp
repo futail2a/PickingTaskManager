@@ -245,7 +245,7 @@ void PickingTaskManager::callMoveGripper(const int degree){
 }
 
 void PickingTaskManager::callOpenGripper(){
-        m_manipulatorCommonInterface_Middle->OpenGripper();
+        m_manipulatorCommonInterface_Middle->openGripper();
 }
 
 extern "C"
