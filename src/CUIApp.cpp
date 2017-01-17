@@ -90,7 +90,7 @@ void CUIApp::searchMotionPlan(){
 
 void  CUIApp::searchReplacingPlan(){
 
-	//TODO: Define these parameter as configuration
+	//TODO: Define these parameters as configuration
 	m_replacingRobotJointAngles->length(6);
 	m_replacingRobotJointAngles[0].data=-1.5;
 	m_replacingRobotJointAngles[1].data=1.0;
