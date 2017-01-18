@@ -86,6 +86,7 @@ void CUIApp::searchMotionPlan(){
 	  }
 	  std::cout <<std::endl;
 	}
+	searchReplacingPlan();
 }
 
 void  CUIApp::searchReplacingPlan(){
@@ -123,11 +124,11 @@ void CUIApp::generateMotionPlan(){
 
 	std::cout << "--Try Graspping--" << std::endl;
 	m_rtc->callMoveGripper(70);
+	sleep(3);
 	m_invManipPlan = inversePlan(m_manipPlan);
 	m_rtc->callFollowManipPlan(m_invManipPlan);
 
 	std::cout << "--Move to Cargo--" << std::endl;
-	searchReplacingPlan();
 	m_rtc->callFollowManipPlan(m_replacingPlan);
 	m_rtc->callOpenGripper();
 
