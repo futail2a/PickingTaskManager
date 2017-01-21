@@ -1,4 +1,4 @@
-set(comp_srcs PickingTaskManager.cpp CUIApp.cpp)
+set(comp_srcs PickingTaskManager.cpp CUIApp.cpp MotionGeneratorServiceDecorator.cpp)
 set(standalone_srcs PickingTaskManagerComp.cpp)
 
 if (DEFINED OPENRTM_INCLUDE_DIRS)

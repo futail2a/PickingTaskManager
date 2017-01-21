@@ -1,4 +1,4 @@
-set(hdrs PickingTaskManager.h CUIApp.h
+set(hdrs PickingTaskManager.h CUIApp.h MotionGeneratorServiceDecorator.h
     PARENT_SCOPE
     )
 
