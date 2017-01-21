@@ -3,43 +3,47 @@
 #include <thread>
 #include <exception>
 
-MotionGeneratorServiceDecorator::MotionGeneratorServiceDecorator(RTC::CorbaConsumer<Manipulation::MotionGeneratorService>* pPortBase, SimplePathFollower* pRTC){
+MotionGeneratorServiceDecorator::MotionGeneratorServiceDecorator(RTC::CorbaConsumer<Manipulation::MotionGeneratorService>* pPortBase, PickingTaskManager* pRTC){
 	m_base = pPortBase;
 	m_rtc = pRTC;
 }
 
 
 Manipulation::ReturnValue* MotionGeneratorServiceDecorator::getCurrentRobotJointAngles(Manipulation::JointAngleSeq_out jointAngles){
-	return m_base->getCurrentRobotJointAngles(jointAngles)
+  return m_base->_ptr()->getCurrentRobotJointAngles(jointAngles);
 }
 
 Manipulation::ReturnValue* MotionGeneratorServiceDecorator::followManipPlan(const Manipulation::ManipulationPlan& manipPlan){
   Manipulation::ManipulationPlan_var plan;
-  plan = manipPlan;
+  plan = new Manipulation::ManipulationPlan(manipPlan);
+
   createFollowingThread(plan);
 
   while(true){
     if(isDisconnected){
-      createFollowingThread(m_rtc->refreshManipPlan(manipPlan));
+      m_rtc->refreshManipPlan(plan);
+      createFollowingThread(plan);
     }
-    if(result){
+    if(m_result){
       return m_result;
     }
   }
-    return Manipulation::UNKOWN_ERROR;
+
+  //RETURN_ID::ERROR_UNKNOWN;
+  return m_result;
 }
 
-void createFollowingThread(const Manipulation::ManipulationPlan& manipPlan){
+void MotionGeneratorServiceDecorator::createFollowingThread(const Manipulation::ManipulationPlan& manipPlan){
   try {
-    std::thread following(followManipPlan(plan));
+    std::thread following(&MotionGeneratorServiceDecorator::callFollowManipPlan, this, manipPlan);
     following.detach();
   } catch (std::exception &ex) {
     std::cerr << ex.what() << std::endl;
   }
 }
   
-void followManipPlan(manipPlan){
-    m_result = m_base->forManipPlan(manipPlan);
+void MotionGeneratorServiceDecorator::callFollowManipPlan(const Manipulation::ManipulationPlan& manipPlan){
+  m_result = m_base->_ptr()->followManipPlan(manipPlan);
 }
 
 // End of example implementational code

@@ -319,7 +319,7 @@ class PickingTaskManager
 	 Manipulation::ReturnValue* callFollowManipPlan(const Manipulation::ManipulationPlan& manipPlan);
 	 Manipulation::ReturnValue* callGetApproachOrientation(const Manipulation::ObjectInfo& objInfo, Manipulation::EndEffectorPose_out eePos);
 
-	 Manipulation::ManipulationPlan* refreshManipPlan(const Manipulation::ManipulationPlan& manipPlan);
+	 void refreshManipPlan(Manipulation::ManipulationPlan_var manipPlan);
 
 void callMoveGripper(const int degree);
 

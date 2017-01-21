@@ -248,18 +248,17 @@ void PickingTaskManager::callOpenGripper(){
         m_manipulatorCommonInterface_Middle->openGripper();
 }
 
-Manipulation::ManipulationPlan* PickingTaskManager::refreshManipPlan(const Manipulation::ManipulationPlan& manipPlan){
+void PickingTaskManager::refreshManipPlan(Manipulation::ManipulationPlan_var manipPlan){
 	Manipulation::JointAngleSeq_var currentJointAngles;
 	currentJointAngles = new Manipulation::JointAngleSeq();
 	callGetCurrentRobotJointAngles(currentJointAngles);
 
 	Manipulation::ManipulationPlan_var newPlan;
 	newPlan = new Manipulation::ManipulationPlan();
-	int n = manipPlan.manipPath.length() - 1;
+	int n = manipPlan->manipPath.length() - 1;
 
-	callPlanManipulation(manipPlan.robotID, currentJointAngles, manipPlan.manipPath[n], newPlan);
-
-	return newPlan._retn();
+	callPlanManipulation(manipPlan->robotID, currentJointAngles, manipPlan->manipPath[n], newPlan);
+	manipPlan = newPlan._retn();
 }
 
 extern "C"

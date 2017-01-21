@@ -6,8 +6,7 @@
 #include "ExtendedDataTypesSkel.h"
 #include "InterfaceDataTypesSkel.h"
 
-#include "MobileRobotSVC_impl.h"
-#include "PickingTaskManager"
+#include "PickingTaskManager.h"
 class PickingTaskManager;
 
 class MotionGeneratorServiceDecorator : public RTC::CorbaConsumer<Manipulation::MotionGeneratorService>{
@@ -16,9 +15,12 @@ private:
   RTC::CorbaConsumer<Manipulation::MotionGeneratorService>* m_base;
   bool isDisconnected = false;
   Manipulation::ReturnValue* m_result;
+  void createFollowingThread(const Manipulation::ManipulationPlan& manipPlan);
+
+  void callFollowManipPlan(const Manipulation::ManipulationPlan& manipPlan);
   
 public :
-  MotionGeneratorServiceDecorator(RTC::CorbaConsumer<Manipulation::MotionGeneratorService>* pPortBase, SimplePathFollower* pRTC);
+  MotionGeneratorServiceDecorator(RTC::CorbaConsumer<Manipulation::MotionGeneratorService>* pPortBase, PickingTaskManager* pRTC);
   ~MotionGeneratorServiceDecorator();
 		 	
   Manipulation::ReturnValue* getCurrentRobotJointAngles(Manipulation::JointAngleSeq_out jointAngles);
