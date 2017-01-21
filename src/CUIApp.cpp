@@ -124,7 +124,7 @@ void CUIApp::generateMotionPlan(){
 
 	std::cout << "--Try Graspping--" << std::endl;
 	m_rtc->callMoveGripper(70);
-	sleep(3);
+	//sleep(3);
 	m_invManipPlan = inversePlan(m_manipPlan);
 	m_rtc->callFollowManipPlan(m_invManipPlan);
 

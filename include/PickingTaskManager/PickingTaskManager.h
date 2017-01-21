@@ -319,9 +319,7 @@ public:
   DisconnCallback(PickingTaskManager* ptr){m_rtc=ptr;}
   //~DisconnCallback(){std::cout<<"Disconnection Callback"<<std::endl;}
 
-void operator()(RTC::ConnectorProfile& profile){
-    m_rtc->m_MotionGeneratorServiceDecorator->connectionIs(false);
-  }
+  void operator()(RTC::ConnectorProfile& profile);
 };
 
 class ConnCallback: public RTC::ConnectionCallback{
@@ -332,9 +330,7 @@ public:
   ConnCallback(PickingTaskManager* ptr){m_rtc=ptr;}
   //~ConnCallback(){std::cout<<"Connection Callback"<<std::endl;}
   
-void operator()(RTC::ConnectorProfile& profile){
-    m_rtc->m_MotionGeneratorServiceDecorator->connectionIs(true);
-  }
+  void operator()(RTC::ConnectorProfile& profile);
 };
 
  

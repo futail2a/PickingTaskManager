@@ -272,6 +272,14 @@ void PickingTaskManager::refreshManipPlan(Manipulation::ManipulationPlan_var man
 	manipPlan = newPlan._retn();
 }
 
+void  PickingTaskManager::DisconnCallback::operator()(RTC::ConnectorProfile& profile){
+	m_rtc->m_MotionGeneratorServiceDecorator->connectionIs(false);
+}
+
+void  PickingTaskManager::ConnCallback::operator()(RTC::ConnectorProfile& profile){
+	m_rtc->m_MotionGeneratorServiceDecorator->connectionIs(true);
+}
+
 extern "C"
 {
  
