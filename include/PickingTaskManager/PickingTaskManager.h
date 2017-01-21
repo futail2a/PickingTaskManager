@@ -288,7 +288,7 @@ class PickingTaskManager
   RTC::CorbaConsumer<Manipulation::KinematicSolverService> m_KinematicsSolverService;
   /*!
    */
-  RTC::CorbaConsumer<Manipulation::MotionGeneratorService> m_MotionGeneratorService;
+  RTC::CorbaConsumer<Manipulation::MotionGeneratorService> m_MotionGeneratorServiceDecorator;
   /*!
    */
   RTC::CorbaConsumer<JARA_ARM::ManipulatorCommonInterface_Middle> m_manipulatorCommonInterface_Middle;
@@ -307,8 +307,17 @@ class PickingTaskManager
   
   // </rtc-template>]
 
-	 CUIApp* m_app;
+  CUIApp* m_app;
 
+class DisconnCallback: public RTC::ConnectionCallback{
+  void operator();
+};
+
+class ConnCallback: public RTC::ConnectionCallback{
+  void operator();
+};
+
+ 
  public:
 	 Manipulation::ReturnValue* callDetectObject(const Manipulation::ObjectIdentifier& objectID, Manipulation::ObjectInfo_out objInfo);
 	 Manipulation::ReturnValue* callSolveKinematics(const Manipulation::EndEffectorPose& targetPose, Manipulation::JointAngleSeq startJointAngles,

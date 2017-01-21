@@ -73,9 +73,16 @@ RTC::ReturnCode_t PickingTaskManager::onInitialize()
   m_ObjectDetectionServicePort.registerConsumer("ObjectDetectionService", "Manipulation::ObjectDetectionService", m_ObjectDetectionService);
   m_ManipulationPlannerServicePort.registerConsumer("ManipulationPlannerService", "Manipulation::ManipulationPlannerService", m_ManipulationPlannerService);
   m_KinematicsSolverServicePort.registerConsumer("Manipulation_KinematicSolverService", "Manipulation::KinematicSolverService", m_KinematicsSolverService);
-  m_MotionGeneratorServicePort.registerConsumer("MotionGeneratorService", "Manipulation::MotionGeneratorService", m_MotionGeneratorService);
+  m_MotionGeneratorServicePort.registerConsumer("MotionGeneratorService", "Manipulation::MotionGeneratorService",m_MotionGeneratorServiceDecorator);
   m_manipulatorCommonInterface_MiddlePort.registerConsumer("JARA_ARM_ManipulatorCommonInterface_Middle", "JARA_ARM::ManipulatorCommonInterface_Middle", m_manipulatorCommonInterface_Middle);
   m_ObjectHandleStrategyServicePort.registerConsumer("ObjectHandleStrategyService", "Manipulation::ObjectHandleStrategyService", m_ObjectHandleStrategyService);
+
+  ConnCallback conn = new ConnCallback();
+  DisconnCallback disconn = new DisconnCallback();
+  
+  m_ManipulationPlannerServicePort.setOnConnected(conn);
+  m_ManipulationPlannerServicePort.setOnDisconnected(diconn);
+  
   
   // Set CORBA Service Ports
   addPort(m_ObjectDetectionServicePort);
@@ -224,7 +231,7 @@ Manipulation::ReturnValue* PickingTaskManager::callSolveKinematics(const Manipul
 }
 
 Manipulation::ReturnValue* PickingTaskManager::callGetCurrentRobotJointAngles(Manipulation::JointAngleSeq_out jointAngles){
-	return m_MotionGeneratorService->getCurrentRobotJointAngles(jointAngles);
+	return m_MotionGeneratorServiceDecorator->getCurrentRobotJointAngles(jointAngles);
 }
 
 Manipulation::ReturnValue* PickingTaskManager::callPlanManipulation(const Manipulation::RobotIdentifier& robotID, const Manipulation::JointAngleSeq& startJointAngles,
@@ -233,7 +240,7 @@ Manipulation::ReturnValue* PickingTaskManager::callPlanManipulation(const Manipu
 }
 
 Manipulation::ReturnValue* PickingTaskManager::callFollowManipPlan(const Manipulation::ManipulationPlan& manipPlan){
-	return m_MotionGeneratorService->followManipPlan(manipPlan);
+	return m_MotionGeneratorServiceDecorator->followManipPlan(manipPlan);
 }
 
 Manipulation::ReturnValue* PickingTaskManager::callGetApproachOrientation(const Manipulation::ObjectInfo& objInfo, Manipulation::EndEffectorPose_out eePos){
@@ -260,6 +267,15 @@ void PickingTaskManager::refreshManipPlan(Manipulation::ManipulationPlan_var man
 	callPlanManipulation(manipPlan->robotID, currentJointAngles, manipPlan->manipPath[n], newPlan);
 	manipPlan = newPlan._retn();
 }
+
+void PickingTaskManager::DisconnCallback::operator(){
+    m_MotionGeneratorServiceDecorator.connectionIs(false);
+}
+
+void PickingTaskManager::ConnCallback::operator(){
+    m_MotionGeneratorServiceDecorator.connectionIs(true);
+}
+
 
 extern "C"
 {
