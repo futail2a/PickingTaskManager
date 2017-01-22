@@ -23,7 +23,7 @@
 // <rtc-template block="consumer_stub_h">
 #include "TrajectoryPlannerStub.h"
 #include "ManipulatorCommonInterface_MiddleLevelStub.h"
-#include "TrajectoryPlannerStub.h"
+#include "MotionGeneratorServiceDecorator.h"
 
 // </rtc-template>
 
@@ -40,6 +40,7 @@
 using namespace RTC;
 
 class CUIApp;
+class MotionGeneratorServiceDecorator;
 
 /*!
  * @class PickingTaskManager
@@ -288,7 +289,8 @@ class PickingTaskManager
   RTC::CorbaConsumer<Manipulation::KinematicSolverService> m_KinematicsSolverService;
   /*!
    */
-  RTC::CorbaConsumer<Manipulation::MotionGeneratorService> m_MotionGeneratorServiceDecorator;
+  RTC::CorbaConsumer<Manipulation::MotionGeneratorService> m_MotionGeneratorService;
+  MotionGeneratorServiceDecorator m_MotionGeneratorServiceDecorator;  
   /*!
    */
   RTC::CorbaConsumer<JARA_ARM::ManipulatorCommonInterface_Middle> m_manipulatorCommonInterface_Middle;
@@ -310,11 +312,29 @@ class PickingTaskManager
   CUIApp* m_app;
 
 class DisconnCallback: public RTC::ConnectionCallback{
-  void operator();
+private:
+  PickingTaskManager* m_rtc;
+  
+public:
+  DisconnCallback(PickingTaskManager* ptr){m_rtc=ptr;}
+  //~DisconnCallback(){std::cout<<"Disconnection Callback"<<std::endl;}
+
+void operator()(RTC::ConnectorProfile& profile){
+    m_rtc->m_MotionGeneratorServiceDecorator.connectionIs(false);
+  }
 };
 
 class ConnCallback: public RTC::ConnectionCallback{
-  void operator();
+private:
+  PickingTaskManager* m_rtc;
+  
+public:
+  ConnCallback(PickingTaskManager* ptr){m_rtc=ptr;}
+  //~ConnCallback(){std::cout<<"Connection Callback"<<std::endl;}
+  
+void operator()(RTC::ConnectorProfile& profile){
+    m_rtc->m_MotionGeneratorServiceDecorator.connectionIs(true);
+  }
 };
 
  

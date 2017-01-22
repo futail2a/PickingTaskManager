@@ -42,9 +42,9 @@ PickingTaskManager::PickingTaskManager(RTC::Manager* manager)
     m_ObjectDetectionServicePort("ObjectDetectionService"),
     m_ManipulationPlannerServicePort("ManipulationPlannerService"),
     m_KinematicsSolverServicePort("KinematicsSolverService"),
-    m_MotionGeneratorServicePort("MotionGeneratorService"),
     m_manipulatorCommonInterface_MiddlePort("manipulatorCommonInterface_Middle"),
-    m_ObjectHandleStrategyServicePort("ObjectHandleStrategyService")
+    m_ObjectHandleStrategyServicePort("ObjectHandleStrategyService"),
+    m_MotionGeneratorServicePort("MotionGeneratorService")
 
     // </rtc-template>
 {
@@ -77,11 +77,13 @@ RTC::ReturnCode_t PickingTaskManager::onInitialize()
   m_manipulatorCommonInterface_MiddlePort.registerConsumer("JARA_ARM_ManipulatorCommonInterface_Middle", "JARA_ARM::ManipulatorCommonInterface_Middle", m_manipulatorCommonInterface_Middle);
   m_ObjectHandleStrategyServicePort.registerConsumer("ObjectHandleStrategyService", "Manipulation::ObjectHandleStrategyService", m_ObjectHandleStrategyService);
 
-  ConnCallback conn = new ConnCallback();
-  DisconnCallback disconn = new DisconnCallback();
+  ConnCallback* conn;
+  conn = new ConnCallback(this);
+  DisconnCallback* disconn;
+  disconn = new DisconnCallback(this);
   
   m_ManipulationPlannerServicePort.setOnConnected(conn);
-  m_ManipulationPlannerServicePort.setOnDisconnected(diconn);
+  m_ManipulationPlannerServicePort.setOnDisconnected(disconn);
   
   
   // Set CORBA Service Ports
@@ -267,15 +269,6 @@ void PickingTaskManager::refreshManipPlan(Manipulation::ManipulationPlan_var man
 	callPlanManipulation(manipPlan->robotID, currentJointAngles, manipPlan->manipPath[n], newPlan);
 	manipPlan = newPlan._retn();
 }
-
-void PickingTaskManager::DisconnCallback::operator(){
-    m_MotionGeneratorServiceDecorator.connectionIs(false);
-}
-
-void PickingTaskManager::ConnCallback::operator(){
-    m_MotionGeneratorServiceDecorator.connectionIs(true);
-}
-
 
 extern "C"
 {

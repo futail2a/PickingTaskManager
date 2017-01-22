@@ -2,14 +2,11 @@
 #ifndef MGDECORATOR_H
 #define MGDECORATOR_H
 
-#include "BasicDataTypeSkel.h"
-#include "ExtendedDataTypesSkel.h"
-#include "InterfaceDataTypesSkel.h"
-
+#include <rtm/CorbaPort.h>
 #include "PickingTaskManager.h"
 class PickingTaskManager;
 
-class MotionGeneratorServiceDecorator : public RTC::CorbaConsumer<Manipulation::MotionGeneratorService>{
+class MotionGeneratorServiceDecorator: public RTC::CorbaConsumer<Manipulation::MotionGeneratorService>{
 private:
   PickingTaskManager* m_rtc;
   RTC::CorbaConsumer<Manipulation::MotionGeneratorService>* m_base;
@@ -19,9 +16,11 @@ private:
 
   void callFollowManipPlan(const Manipulation::ManipulationPlan& manipPlan);
   
-public :
-  MotionGeneratorServiceDecorator(RTC::CorbaConsumer<Manipulation::MotionGeneratorService>* pPortBase, PickingTaskManager* pRTC);
+public:
+  MotionGeneratorServiceDecorator();
   ~MotionGeneratorServiceDecorator();
+
+  void init(RTC::CorbaConsumer<Manipulation::MotionGeneratorService>* pPortBase, PickingTaskManager* pRTC);
 		 	
   Manipulation::ReturnValue* getCurrentRobotJointAngles(Manipulation::JointAngleSeq_out jointAngles);
 
