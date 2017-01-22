@@ -290,7 +290,7 @@ class PickingTaskManager
   /*!
    */
   RTC::CorbaConsumer<Manipulation::MotionGeneratorService> m_MotionGeneratorService;
-  MotionGeneratorServiceDecorator m_MotionGeneratorServiceDecorator;  
+  MotionGeneratorServiceDecorator* m_MotionGeneratorServiceDecorator;
   /*!
    */
   RTC::CorbaConsumer<JARA_ARM::ManipulatorCommonInterface_Middle> m_manipulatorCommonInterface_Middle;
@@ -320,7 +320,7 @@ public:
   //~DisconnCallback(){std::cout<<"Disconnection Callback"<<std::endl;}
 
 void operator()(RTC::ConnectorProfile& profile){
-    m_rtc->m_MotionGeneratorServiceDecorator.connectionIs(false);
+    m_rtc->m_MotionGeneratorServiceDecorator->connectionIs(false);
   }
 };
 
@@ -333,7 +333,7 @@ public:
   //~ConnCallback(){std::cout<<"Connection Callback"<<std::endl;}
   
 void operator()(RTC::ConnectorProfile& profile){
-    m_rtc->m_MotionGeneratorServiceDecorator.connectionIs(true);
+    m_rtc->m_MotionGeneratorServiceDecorator->connectionIs(true);
   }
 };
 

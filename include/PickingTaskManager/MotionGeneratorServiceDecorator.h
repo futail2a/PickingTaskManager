@@ -4,12 +4,14 @@
 
 #include <rtm/CorbaPort.h>
 #include "PickingTaskManager.h"
+#include "TrajectoryPlannerStub.h"
 class PickingTaskManager;
 
 class MotionGeneratorServiceDecorator: public RTC::CorbaConsumer<Manipulation::MotionGeneratorService>{
 private:
   PickingTaskManager* m_rtc;
-  RTC::CorbaConsumer<Manipulation::MotionGeneratorService>* m_base;
+  RTC::CorbaConsumer<Manipulation::MotionGeneratorService>* m_MotionGeneratorService;
+
   bool isDisconnected = false;
   Manipulation::ReturnValue* m_result;
   void createFollowingThread(const Manipulation::ManipulationPlan& manipPlan);
@@ -17,11 +19,9 @@ private:
   void callFollowManipPlan(const Manipulation::ManipulationPlan& manipPlan);
   
 public:
-  MotionGeneratorServiceDecorator();
-  ~MotionGeneratorServiceDecorator();
+  MotionGeneratorServiceDecorator(RTC::CorbaConsumer<Manipulation::MotionGeneratorService>* pCorbaConsumer, PickingTaskManager* pRTC);
+  //~MotionGeneratorServiceDecorator();
 
-  void init(RTC::CorbaConsumer<Manipulation::MotionGeneratorService>* pPortBase, PickingTaskManager* pRTC);
-		 	
   Manipulation::ReturnValue* getCurrentRobotJointAngles(Manipulation::JointAngleSeq_out jointAngles);
 
   Manipulation::ReturnValue* followManipPlan(const Manipulation::ManipulationPlan& manipPlan);

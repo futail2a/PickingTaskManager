@@ -73,14 +73,16 @@ RTC::ReturnCode_t PickingTaskManager::onInitialize()
   m_ObjectDetectionServicePort.registerConsumer("ObjectDetectionService", "Manipulation::ObjectDetectionService", m_ObjectDetectionService);
   m_ManipulationPlannerServicePort.registerConsumer("ManipulationPlannerService", "Manipulation::ManipulationPlannerService", m_ManipulationPlannerService);
   m_KinematicsSolverServicePort.registerConsumer("Manipulation_KinematicSolverService", "Manipulation::KinematicSolverService", m_KinematicsSolverService);
-  m_MotionGeneratorServicePort.registerConsumer("MotionGeneratorService", "Manipulation::MotionGeneratorService",m_MotionGeneratorServiceDecorator);
+  m_MotionGeneratorServicePort.registerConsumer("MotionGeneratorService", "Manipulation::MotionGeneratorService",m_MotionGeneratorService);
   m_manipulatorCommonInterface_MiddlePort.registerConsumer("JARA_ARM_ManipulatorCommonInterface_Middle", "JARA_ARM::ManipulatorCommonInterface_Middle", m_manipulatorCommonInterface_Middle);
   m_ObjectHandleStrategyServicePort.registerConsumer("ObjectHandleStrategyService", "Manipulation::ObjectHandleStrategyService", m_ObjectHandleStrategyService);
 
+  m_MotionGeneratorServiceDecorator = new MotionGeneratorServiceDecorator(&m_MotionGeneratorService,this);
+
   ConnCallback* conn;
-  conn = new ConnCallback(this);
+  conn = new PickingTaskManager::ConnCallback(this);
   DisconnCallback* disconn;
-  disconn = new DisconnCallback(this);
+  disconn = new PickingTaskManager::DisconnCallback(this);
   
   m_ManipulationPlannerServicePort.setOnConnected(conn);
   m_ManipulationPlannerServicePort.setOnDisconnected(disconn);

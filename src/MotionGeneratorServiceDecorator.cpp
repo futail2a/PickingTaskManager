@@ -3,13 +3,13 @@
 #include <thread>
 #include <exception>
 
-void MotionGeneratorServiceDecorator::init(RTC::CorbaConsumer<Manipulation::MotionGeneratorService>* pPortBase, PickingTaskManager* pRTC){
-	m_base = pPortBase;
+MotionGeneratorServiceDecorator::MotionGeneratorServiceDecorator(RTC::CorbaConsumer<Manipulation::MotionGeneratorService>* pCorbaConsumer, PickingTaskManager* pRTC){
+	m_MotionGeneratorService = pCorbaConsumer;
 	m_rtc = pRTC;
 }
 
 Manipulation::ReturnValue* MotionGeneratorServiceDecorator::getCurrentRobotJointAngles(Manipulation::JointAngleSeq_out jointAngles){
-  return m_base->_ptr()->getCurrentRobotJointAngles(jointAngles);
+  return m_MotionGeneratorService->_ptr()->getCurrentRobotJointAngles(jointAngles);
 }
 
 Manipulation::ReturnValue* MotionGeneratorServiceDecorator::followManipPlan(const Manipulation::ManipulationPlan& manipPlan){
@@ -44,7 +44,7 @@ void MotionGeneratorServiceDecorator::createFollowingThread(const Manipulation::
 }
   
 void MotionGeneratorServiceDecorator::callFollowManipPlan(const Manipulation::ManipulationPlan& manipPlan){
-  m_result = m_base->_ptr()->followManipPlan(manipPlan);
+  m_result = m_MotionGeneratorService->_ptr()->followManipPlan(manipPlan);
 }
 
 // End of example implementational code
