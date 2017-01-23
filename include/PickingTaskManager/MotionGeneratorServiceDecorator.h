@@ -13,7 +13,7 @@ private:
   RTC::CorbaConsumer<Manipulation::MotionGeneratorService>* m_MotionGeneratorService;
 
   bool isDisconnected = false;
-  Manipulation::ReturnValue* m_result;
+  Manipulation::ReturnValue_var m_result;
   void createFollowingThread(const Manipulation::ManipulationPlan& manipPlan);
 
   void callFollowManipPlan(const Manipulation::ManipulationPlan& manipPlan);

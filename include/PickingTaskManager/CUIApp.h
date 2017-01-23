@@ -19,6 +19,7 @@ public:
 	void generateMotionPlan();
 	void showParams();
 	void searchReplacingPlan();
+    	void debugReplication();
 
 	//for debugging only, delete this function before release
 	//void setSampleManipPlan();

@@ -153,6 +153,44 @@ Manipulation::ManipulationPlan* CUIApp::inversePlan(const Manipulation::Manipula
 	return tmp._retn();
 }
 
+void CUIApp::debugReplication(){
+	std::cout << "--Motion Debugging--" << std::endl;
+    m_startRobotJointAngles->length(7);
+    m_startRobotJointAngles[0].data=0.0;
+    m_startRobotJointAngles[1].data=0.5;
+    m_startRobotJointAngles[2].data=0.0;
+    m_startRobotJointAngles[3].data=0.0;
+    m_startRobotJointAngles[4].data=1.0;
+    m_startRobotJointAngles[5].data=0.0;
+    m_startRobotJointAngles[6].data=0.9;
+
+    m_goalRobotJointAngles->length(7);
+    m_goalRobotJointAngles[0].data=0.0;
+    m_goalRobotJointAngles[1].data=0.3938;
+    m_goalRobotJointAngles[2].data=1.9663;
+    m_goalRobotJointAngles[3].data=0.0;
+    m_goalRobotJointAngles[4].data=-0.749;
+    m_goalRobotJointAngles[5].data=0.0;
+    m_goalRobotJointAngles[6].data=0.9;
+
+	std::cout << "--Motion Plannig--" << std::endl;
+	//m_robotID->name = CORBA::string_dup("orochi");
+	m_robotID->name = CORBA::string_dup("orochi");
+	m_rtc->callPlanManipulation(m_robotID, m_startRobotJointAngles, m_goalRobotJointAngles, m_manipPlan);
+
+	std::cout << "--Start motion--" << std::endl;
+	//m_rtc->callMoveGripper(70);
+	m_rtc->callFollowManipPlan(m_manipPlan);
+
+
+	std::cout << "--Start Inv motion--" << std::endl;
+	//m_rtc->callOpenGripper();
+	//sleep(3);
+	//m_invManipPlan = inversePlan(m_manipPlan);
+	//m_rtc->callFollowManipPlan(m_invManipPlan);
+
+
+}
 
 void CUIApp::showParams(){
 	std::cout << "Current motion plan" << std::endl;

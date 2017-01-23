@@ -84,8 +84,8 @@ RTC::ReturnCode_t PickingTaskManager::onInitialize()
   DisconnCallback* disconn;
   disconn = new PickingTaskManager::DisconnCallback(this);
   
-  m_ManipulationPlannerServicePort.setOnConnected(conn);
-  m_ManipulationPlannerServicePort.setOnDisconnected(disconn);
+  m_MotionGeneratorServicePort.setOnConnected(conn);
+  m_MotionGeneratorServicePort.setOnDisconnected(disconn);
   
   
   // Set CORBA Service Ports
@@ -170,6 +170,11 @@ RTC::ReturnCode_t PickingTaskManager::onExecute(RTC::UniqueId ec_id)
 
   case 's':
           m_app->showParams();
+break;
+
+  case 'd':
+          m_app->debugReplication();
+break;
     	  
   case 'h':
 	  std::cout << "1: detect target object" << std::endl;
@@ -273,11 +278,13 @@ void PickingTaskManager::refreshManipPlan(Manipulation::ManipulationPlan_var man
 }
 
 void  PickingTaskManager::DisconnCallback::operator()(RTC::ConnectorProfile& profile){
-	m_rtc->m_MotionGeneratorServiceDecorator->connectionIs(false);
+  std::cout << "setOnDisconnected called" << std::endl;
+  m_rtc->m_MotionGeneratorServiceDecorator->connectionIs(false);
 }
 
 void  PickingTaskManager::ConnCallback::operator()(RTC::ConnectorProfile& profile){
-	m_rtc->m_MotionGeneratorServiceDecorator->connectionIs(true);
+  std::cout << "setOnConnected called" << std::endl;
+  m_rtc->m_MotionGeneratorServiceDecorator->connectionIs(true);
 }
 
 extern "C"
