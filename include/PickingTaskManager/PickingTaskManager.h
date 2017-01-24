@@ -222,6 +222,7 @@ class PickingTaskManager
    */
   // virtual RTC::ReturnCode_t onRateChanged(RTC::UniqueId ec_id);
 
+   bool portConnected = true;
 
  protected:
   // <rtc-template block="protected_attribute">
@@ -326,10 +327,11 @@ class ConnCallback: public RTC::ConnectionCallback{
 private:
   PickingTaskManager* m_rtc;
   
+
 public:
   ConnCallback(PickingTaskManager* ptr){m_rtc=ptr;}
   //~ConnCallback(){std::cout<<"Connection Callback"<<std::endl;}
-  
+  int callFollowManipPlan(const Manipulation::ManipulationPlan& manipPlan);
   void operator()(RTC::ConnectorProfile& profile);
 };
 

@@ -13,6 +13,8 @@
 #include <fstream>
 #include <sstream>
 
+#include <thread>
+#include <exception>
 // Module specification
 // <rtc-template block="module_spec">
 static const char* pickingtaskmanager_spec[] =
@@ -289,12 +291,32 @@ void PickingTaskManager::refreshManipPlan(Manipulation::ManipulationPlan_var man
 
 void  PickingTaskManager::DisconnCallback::operator()(RTC::ConnectorProfile& profile){
   std::cout << "setOnDisconnected called" << std::endl;
-  m_rtc->m_MotionGeneratorServiceDecorator->connectionIs(false);
+ m_rtc->portConnected = false;
 }
 
 void  PickingTaskManager::ConnCallback::operator()(RTC::ConnectorProfile& profile){
   std::cout << "setOnConnected called" << std::endl;
-  m_rtc->m_MotionGeneratorServiceDecorator->connectionIs(true);
+  if(!m_rtc->portConnected){
+	  std::cout << "refresh path" << std::endl;
+	  Manipulation::ManipulationPlan_var plan;
+	  plan = new Manipulation::ManipulationPlan();
+	  m_rtc->refreshManipPlan(plan);
+
+	  std::cout << "Create Thread" << std::endl;
+      std::thread following(&PickingTaskManager::ConnCallback::callFollowManipPlan, this, plan);
+      following.detach();
+  }
+  m_rtc->portConnected = true;
+}
+
+int  PickingTaskManager::ConnCallback::callFollowManipPlan(const Manipulation::ManipulationPlan& manipPlan){
+  try{
+  m_rtc->callFollowManipPlan(manipPlan);
+  }catch(CORBA::Exception& e) {
+   std::cout <<"RPC failed"<<std::endl;
+   return 1;
+  }
+  return 0;
 }
 
 extern "C"
