@@ -27,10 +27,11 @@ Manipulation::ReturnValue* MotionGeneratorServiceDecorator::followManipPlan(cons
     if(isPortDisconnected){
       std::cout <<"Port was Disconnected"<<std::endl;	  
       while(true){
-	//std::cout <<"Check port connection"<<isPortDisconnected<<std::endl;	 
+	std::cout <<"Check port connection:"<<isPortDisconnected<<std::endl;	 
 	  if(!isPortDisconnected){
 	    std::cout<<"Retrying.."<<std::endl;
-            m_rtc->refreshManipPlan(plan);
+	    sleep(10);
+            //m_rtc->refreshManipPlan(plan);
             createFollowingThread(plan);
 	    break;
           }
@@ -51,7 +52,7 @@ void MotionGeneratorServiceDecorator::createFollowingThread(const Manipulation::
   std::cout << "Create Thread" << std::endl;
     try {
     std::thread following(&MotionGeneratorServiceDecorator::callFollowManipPlan, this, manipPlan);
-    following.join();
+    following.detach();
     } catch (std::exception &ex) {
     std::cerr << ex.what() << std::endl;
     }
