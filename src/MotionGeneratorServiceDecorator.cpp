@@ -23,13 +23,15 @@ Manipulation::ReturnValue* MotionGeneratorServiceDecorator::followManipPlan(cons
 
   while(true){
     if(isDisconnected){
-      std::cout <<"Port Disconnected"<<std::endl;
-      while(!isDisconnected){
-        std::cout <<"Port Connected"<<std::endl;	
+      std::cout <<isDisconnected<<std::endl;
+    }
+    if(!isDisconnected){
+        std::cout <<isDisconnected<<std::endl;	
         m_rtc->refreshManipPlan(plan);
         createFollowingThread(plan);
-      }
+        isDisconnected = true;
     }
+    
     if(m_result->returnID==0){
       std::cout <<"RPC successed"<<std::endl;      
       return m_result._retn();
@@ -41,20 +43,20 @@ Manipulation::ReturnValue* MotionGeneratorServiceDecorator::followManipPlan(cons
 }
 
 void MotionGeneratorServiceDecorator::createFollowingThread(const Manipulation::ManipulationPlan& manipPlan){
-  try {
+    try {
     std::thread following(&MotionGeneratorServiceDecorator::callFollowManipPlan, this, manipPlan);
     following.detach();
-  } catch (std::exception &ex) {
+    } catch (std::exception &ex) {
     std::cerr << ex.what() << std::endl;
-  }
+    }
 }
   
 void MotionGeneratorServiceDecorator::callFollowManipPlan(const Manipulation::ManipulationPlan& manipPlan){
-try{
+  try{
   m_result = m_MotionGeneratorService->_ptr()->followManipPlan(manipPlan);
-}catch(CORBA::Exception& e) {
-     std::cout <<"RPC failed"<<std::endl;
-}
+  }catch(CORBA::Exception& e) {
+   std::cout <<"RPC failed"<<std::endl;
+  }
 }
 
 // End of example implementational code
