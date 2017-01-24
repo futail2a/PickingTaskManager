@@ -12,7 +12,9 @@ private:
   PickingTaskManager* m_rtc;
   RTC::CorbaConsumer<Manipulation::MotionGeneratorService>* m_MotionGeneratorService;
 
-  bool isDisconnected = false;
+  //true:port has been disconnected
+  //false: port is connected
+  bool isPortDisconnected = false;
   Manipulation::ReturnValue_var m_result;
   void createFollowingThread(const Manipulation::ManipulationPlan& manipPlan);
 
@@ -26,7 +28,7 @@ public:
 
   Manipulation::ReturnValue* followManipPlan(const Manipulation::ManipulationPlan& manipPlan);
 
-  void connectionIs(bool b){isDisconnected=b;}
+  void connectionIs(bool b){isPortDisconnected=!b;}
 };
 
 

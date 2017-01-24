@@ -22,14 +22,17 @@ Manipulation::ReturnValue* MotionGeneratorServiceDecorator::followManipPlan(cons
   createFollowingThread(plan);
 
   while(true){
-    if(isDisconnected){
-      std::cout <<isDisconnected<<std::endl;
-    }
-    if(!isDisconnected){
-        std::cout <<isDisconnected<<std::endl;	
-        m_rtc->refreshManipPlan(plan);
-        createFollowingThread(plan);
-        isDisconnected = true;
+    if(isPortDisconnected){
+      std::cout <<"Port was Disconnected"<<std::endl;	  
+      while(true){
+	std::cout <<"Check port connection"<<isPortDisconnected<<std::endl;	 
+	  if(!isPortDisconnected){
+	    std::cout<<"Retrying.."<<std::endl;
+            m_rtc->refreshManipPlan(plan);
+            createFollowingThread(plan);
+	    break;
+          }
+        }
     }
     
     if(m_result->returnID==0){
