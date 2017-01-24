@@ -174,12 +174,13 @@ void CUIApp::debugReplication(){
     m_goalRobotJointAngles[4].data=-0.749;
     m_goalRobotJointAngles[5].data=0.0;
     m_goalRobotJointAngles[6].data=0.9;
-
+    /*
 	std::cout << "--Motion Plannig--" << std::endl;
 	//m_robotID->name = CORBA::string_dup("orochi");
 	m_robotID->name = CORBA::string_dup("orochi");
 	m_rtc->callPlanManipulation(m_robotID, m_startRobotJointAngles, m_goalRobotJointAngles, m_manipPlan);
-
+	writeManipPlanIntoCSV();*/
+	setSampleManipPlan();
 	std::cout << "--Start motion--" << std::endl;
 	//m_rtc->callMoveGripper(70);
 	m_rtc->callFollowManipPlan(m_manipPlan);
@@ -225,26 +226,32 @@ void CUIApp::setSampleManipPlan(){
 		std::cout << "error" << std::endl;
 	}
 
+	int i = 0;
 	while (getline(ifs, str))
 	{
+
 		std::string tmp;
 		std::istringstream stream(str);
 		Manipulation::JointAngleSeq_var posture;
-		int i = 0;
+
+		m_manipPlan->manipPath.length(i+1);
+                int j = 0;
+		m_manipPlan->manipPath[i].length(6);
 		while (getline(stream, tmp, ','))
 		{
-			double  angle;
-			angle = std::stod(tmp);
+	          double  angle;
 
-			int len = m_manipPlan->manipPath[i].length();
-			m_manipPlan->manipPath[i].length(len + 1);
-			m_manipPlan->manipPath[i][len].data = angle;
-			i++;
+		  angle = std::stod(tmp);
+
+		  //int len = m_manipPlan->manipPath[i].length();
+		  //m_manipPlan->manipPath[i].length(len + 1);
+		  m_manipPlan->manipPath[i][j].data = angle;
+		  j++;
 		}
 
 		int len = m_manipPlan->manipPath.length();
 		m_manipPlan->manipPath.length(len + 1);
-
+		i++;
 	}
-
+	  std::cout << "finish" << std::endl;
 }
