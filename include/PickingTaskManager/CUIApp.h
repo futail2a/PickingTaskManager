@@ -19,6 +19,7 @@ public:
 	void generateMotionPlan();
 	void showParams();
 	void searchReplacingPlan();
+	void goStartPosition(double j[]);
 
 	//for debugging only, delete this function before release
 	//void setSampleManipPlan();
@@ -43,6 +44,7 @@ private:
 
 	Manipulation::EndEffectorPose_var  m_targetPose;
 	
+
 	PickingTaskManager* m_rtc;
 
 	Manipulation::ManipulationPlan* inversePlan(const Manipulation::ManipulationPlan& path);

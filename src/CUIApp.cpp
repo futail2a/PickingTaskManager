@@ -164,6 +164,41 @@ void CUIApp::showParams(){
 	}
 }
 
+//void CUIApp::goHome(double j[]){
+//	unsigned long spdRaion;
+//	std::cout << "Enter joint spped [%]" << std::endl;
+//	std::cin>>spdRaion;
+//
+//	std::cout << "Go home position with configuration parameters" << std::endl;
+//
+//	JARA_ARM::JointPos_var jpos = new JARA_ARM::JointPos();
+//    jpos->length(6);
+//	for (int i =0; i<6; i++){
+//		jpos[i]=j[i];
+//	}
+//
+//	m_rtc->callSetHome(jpos);
+//	m_rtc->callGoHome();
+//
+//}
+
+void CUIApp::goStartPosition(double j[]){
+	unsigned long spdRaion;
+	std::cout << "Enter joint spped [%]" << std::endl;
+	std::cin>>spdRaion;
+
+	std::cout << "Go home position with configuration parameters" << std::endl;
+
+	JARA_ARM::JointPos_var jpos = new JARA_ARM::JointPos();
+    jpos->length(6);
+	for (int i =0; i<6; i++){
+		jpos[i]=j[i];
+	}
+
+	m_rtc->callMovePTPJointRel(jpos);
+
+}
+
 /*
 void CUIApp::setSampleManipPlan(){
 	std::cout << "Generate motion from a csv file" << std::endl;

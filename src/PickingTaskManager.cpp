@@ -28,6 +28,30 @@ static const char* pickingtaskmanager_spec[] =
     "max_instance",      "1",
     "language",          "C++",
     "lang_type",         "compile",
+    // Configuration variables
+    "conf.default.home_j1", "0",
+	"conf.default.home_j2", "0",
+	"conf.default.home_j3", "0",
+	"conf.default.home_j4", "0",
+	"conf.default.home_j5", "0",
+	"conf.default.home_j6", "0",
+    // Widget
+    "conf.__widget__.home_j1", "text",
+	"conf.__widget__.home_j2", "text",
+	"conf.__widget__.home_j3", "text",
+	"conf.__widget__.home_j4", "text",
+	"conf.__widget__.home_j5", "text",
+	"conf.__widget__.home_j6", "text",
+    // Constraints
+
+    "conf.__type__.home_j1", "double",
+	"conf.__type__.home_j2", "double",
+	"conf.__type__.home_j3", "double",
+	"conf.__type__.home_j4", "double",
+	"conf.__type__.home_j5", "double",
+	"conf.__type__.home_j6", "double",
+    ""
+
     ""
   };
 // </rtc-template>
@@ -45,9 +69,9 @@ PickingTaskManager::PickingTaskManager(RTC::Manager* manager)
     m_MotionGeneratorServicePort("MotionGeneratorService"),
     m_manipulatorCommonInterface_MiddlePort("manipulatorCommonInterface_Middle"),
     m_ObjectHandleStrategyServicePort("ObjectHandleStrategyService")
-
     // </rtc-template>
 {
+
 }
 
 /*!
@@ -90,6 +114,15 @@ RTC::ReturnCode_t PickingTaskManager::onInitialize()
   // <rtc-template block="bind_config">
   // </rtc-template>
   
+  bindParameter("home_j1", m_home_j1, "0");
+  bindParameter("home_j2", m_home_j2, "0");
+  bindParameter("home_j3", m_home_j3, "0");
+  bindParameter("home_j4", m_home_j4, "0");
+  bindParameter("home_j5", m_home_j5, "0");
+  bindParameter("home_j6", m_home_j6, "0");
+
+  double home_j[6]={m_home_j1,m_home_j2,m_home_j3,m_home_j4,m_home_j5,m_home_j6};
+
   return RTC::RTC_OK;
 }
 
@@ -136,6 +169,12 @@ RTC::ReturnCode_t PickingTaskManager::onExecute(RTC::UniqueId ec_id)
   std::cin >>c;
 
   switch(c){
+
+  case '0':
+
+	  m_app->goStartPosition(home_j);
+	  break;
+
   case '1':
 	  m_app->detectObj();
 	  break;
@@ -161,6 +200,7 @@ RTC::ReturnCode_t PickingTaskManager::onExecute(RTC::UniqueId ec_id)
           m_app->showParams();
     	  
   case 'h':
+	  std::cout << "0: move to start pose" << std::endl;
 	  std::cout << "1: detect target object" << std::endl;
 	  std::cout << "2: determine end effector's pose" << std::endl;
 	  std::cout << "3: solce inverse kinematics" << std::endl;
@@ -247,6 +287,24 @@ void PickingTaskManager::callMoveGripper(const int degree){
 void PickingTaskManager::callOpenGripper(){
         m_manipulatorCommonInterface_Middle->openGripper();
 }
+
+void PickingTaskManager::callSetHome(const JARA_ARM::JointPos_var jpos){
+	m_manipulatorCommonInterface_Middle->setHome(jpos);
+}
+
+void PickingTaskManager::callGoHome(){
+	m_manipulatorCommonInterface_Middle->goHome();
+}
+
+void PickingTaskManager::callSetSpeedJoint(unsigned long spdRation){
+	m_manipulatorCommonInterface_Middle->setSpeedJoint(spdRation);
+}
+
+void PickingTaskManager::callMovePTPJointRel(const JARA_ARM::JointPos_var jpos){
+	m_manipulatorCommonInterface_Middle->movePTPJointRel(jpos);
+
+}
+
 
 extern "C"
 {
