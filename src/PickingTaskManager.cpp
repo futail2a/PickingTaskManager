@@ -170,11 +170,15 @@ RTC::ReturnCode_t PickingTaskManager::onExecute(RTC::UniqueId ec_id)
 
   case 's':
           m_app->showParams();
-break;
+	  break;
 
   case 'd':
           m_app->debugReplication();
-break;
+	  break;
+
+  case 'e':
+          exit();
+          break;
     	  
   case 'h':
 	  std::cout << "1: detect target object" << std::endl;
@@ -265,6 +269,7 @@ void PickingTaskManager::callOpenGripper(){
 }
 
 void PickingTaskManager::refreshManipPlan(Manipulation::ManipulationPlan_var manipPlan){
+  std::cout << "Refresh path" << std::endl;
 	Manipulation::JointAngleSeq_var currentJointAngles;
 	currentJointAngles = new Manipulation::JointAngleSeq();
 	callGetCurrentRobotJointAngles(currentJointAngles);

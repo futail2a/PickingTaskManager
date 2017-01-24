@@ -18,7 +18,7 @@ private:
   Manipulation::ReturnValue_var m_result;
   void createFollowingThread(const Manipulation::ManipulationPlan& manipPlan);
 
-  void callFollowManipPlan(const Manipulation::ManipulationPlan& manipPlan);
+  int callFollowManipPlan(const Manipulation::ManipulationPlan& manipPlan);
   
 public:
   MotionGeneratorServiceDecorator(RTC::CorbaConsumer<Manipulation::MotionGeneratorService>* pCorbaConsumer, PickingTaskManager* pRTC);

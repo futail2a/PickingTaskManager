@@ -3,6 +3,8 @@
 #include <thread>
 #include <exception>
 
+struct threadAborted{};
+
 MotionGeneratorServiceDecorator::MotionGeneratorServiceDecorator(RTC::CorbaConsumer<Manipulation::MotionGeneratorService>* pCorbaConsumer, PickingTaskManager* pRTC){
 	m_MotionGeneratorService = pCorbaConsumer;
 	m_rtc = pRTC;
@@ -25,7 +27,7 @@ Manipulation::ReturnValue* MotionGeneratorServiceDecorator::followManipPlan(cons
     if(isPortDisconnected){
       std::cout <<"Port was Disconnected"<<std::endl;	  
       while(true){
-	std::cout <<"Check port connection"<<isPortDisconnected<<std::endl;	 
+	//std::cout <<"Check port connection"<<isPortDisconnected<<std::endl;	 
 	  if(!isPortDisconnected){
 	    std::cout<<"Retrying.."<<std::endl;
             m_rtc->refreshManipPlan(plan);
@@ -39,27 +41,31 @@ Manipulation::ReturnValue* MotionGeneratorServiceDecorator::followManipPlan(cons
       std::cout <<"RPC successed"<<std::endl;      
       return m_result._retn();
     }
-  }
+    }
 
   //RETURN_ID::ERROR_UNKNOWN;
   return m_result._retn();
 }
 
 void MotionGeneratorServiceDecorator::createFollowingThread(const Manipulation::ManipulationPlan& manipPlan){
+  std::cout << "Create Thread" << std::endl;
     try {
     std::thread following(&MotionGeneratorServiceDecorator::callFollowManipPlan, this, manipPlan);
-    following.detach();
+    following.join();
     } catch (std::exception &ex) {
     std::cerr << ex.what() << std::endl;
     }
 }
   
-void MotionGeneratorServiceDecorator::callFollowManipPlan(const Manipulation::ManipulationPlan& manipPlan){
+int  MotionGeneratorServiceDecorator::callFollowManipPlan(const Manipulation::ManipulationPlan& manipPlan){
   try{
   m_result = m_MotionGeneratorService->_ptr()->followManipPlan(manipPlan);
   }catch(CORBA::Exception& e) {
    std::cout <<"RPC failed"<<std::endl;
+   return 1;
+   // throw threadAborted{};
   }
+  return 0;
 }
 
 // End of example implementational code
