@@ -30,19 +30,19 @@ Manipulation::ReturnValue* MotionGeneratorServiceDecorator::followManipPlan(cons
 	std::cout <<"Check port connection:"<<isPortDisconnected<<std::endl;	 
 	  if(!isPortDisconnected){
 	    std::cout<<"Retrying.."<<std::endl;
-	    sleep(10);
-            //m_rtc->refreshManipPlan(plan);
+            m_rtc->refreshManipPlan(plan);
+	    std::cout << "successed refresh plan" << std::endl;
             createFollowingThread(plan);
 	    break;
           }
         }
     }
     
-    if(m_result->returnID==0){
+    if(m_result->returnID==Manipulation::OK){
       std::cout <<"RPC successed"<<std::endl;      
       return m_result._retn();
     }
-    }
+  }
 
   //RETURN_ID::ERROR_UNKNOWN;
   return m_result._retn();
@@ -64,7 +64,6 @@ int  MotionGeneratorServiceDecorator::callFollowManipPlan(const Manipulation::Ma
   }catch(CORBA::Exception& e) {
    std::cout <<"RPC failed"<<std::endl;
    return 1;
-   // throw threadAborted{};
   }
   return 0;
 }

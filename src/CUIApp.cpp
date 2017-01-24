@@ -1,5 +1,7 @@
 #include "CUIApp.h"
 #include "PickingTaskManager.h"
+#include<fstream>
+#include<iostream>
 
 CUIApp::CUIApp(PickingTaskManager* compPtr)
 {
@@ -202,7 +204,17 @@ void CUIApp::showParams(){
 	}
 }
 
-/*
+void CUIApp::writeManipPlanIntoCSV(){
+  std::ofstream ofs("m_manipPlan.csv");
+    for(int i=0;i<m_manipPlan->manipPath.length();i++){
+      for(int j=0;j<m_manipPlan->manipPath[i].length()-1;j++){
+          ofs << m_manipPlan->manipPath[i][j].data <<",";
+      }
+      ofs << m_manipPlan->manipPath[i][m_manipPlan->manipPath[i].length()-1].data << std::endl;
+    }
+      
+}
+
 void CUIApp::setSampleManipPlan(){
 	std::cout << "Generate motion from a csv file" << std::endl;
 
@@ -217,24 +229,22 @@ void CUIApp::setSampleManipPlan(){
 	{
 		std::string tmp;
 		std::istringstream stream(str);
-		Manipulation::RobotJointInfo posture;
-
+		Manipulation::JointAngleSeq_var posture;
+		int i = 0;
 		while (getline(stream, tmp, ','))
 		{
-			Manipulation::JointInfo joint;
-			joint.jointAngle = std::stod(tmp);
+			double  angle;
+			angle = std::stod(tmp);
 
-			CORBA::ULong len = posture.jointInfoSeq.length();
-			posture.jointInfoSeq.length(len + 1);
-			posture.jointInfoSeq[len] = joint;
+			int len = m_manipPlan->manipPath[i].length();
+			m_manipPlan->manipPath[i].length(len + 1);
+			m_manipPlan->manipPath[i][len].data = angle;
+			i++;
 		}
 
-		CORBA::ULong len = m_manipPlan->robotJointInfoSeq.length();
-		m_manipPlan->robotJointInfoSeq.length(len + 1);
-		m_manipPlan->robotJointInfoSeq[len] = posture;
+		int len = m_manipPlan->manipPath.length();
+		m_manipPlan->manipPath.length(len + 1);
+
 	}
 
-	//std::cout << "Test solving kinematics.." << std::endl;
-	//m_KinematicsSolverService->solveInverseKinematics((*m_objInfo), m_goalRobotJointInfo);
 }
-*/

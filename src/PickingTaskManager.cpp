@@ -269,16 +269,21 @@ void PickingTaskManager::callOpenGripper(){
 }
 
 void PickingTaskManager::refreshManipPlan(Manipulation::ManipulationPlan_var manipPlan){
-  std::cout << "Refresh path" << std::endl;
+        std::cout << "Refresh path" << std::endl;
 	Manipulation::JointAngleSeq_var currentJointAngles;
 	currentJointAngles = new Manipulation::JointAngleSeq();
-	callGetCurrentRobotJointAngles(currentJointAngles);
-
+	callGetCurrentRobotJointAngles(currentJointAngles);	
+	std::cout << "Current joint angles: "  << std::endl;
+	
 	Manipulation::ManipulationPlan_var newPlan;
 	newPlan = new Manipulation::ManipulationPlan();
 	int n = manipPlan->manipPath.length() - 1;
 
-	callPlanManipulation(manipPlan->robotID, currentJointAngles, manipPlan->manipPath[n], newPlan);
+	std::cout<<"debug: PickingTaskManger.cpp L282" << std::endl;
+	Manipulation::JointAngleSeq_var goalJointAngles;
+	goalJointAngles = new Manipulation::JointAngleSeq(manipPlan->manipPath[n]);
+	std::cout << "Try plan manipulation plan"<<std::endl;
+	callPlanManipulation(manipPlan->robotID, currentJointAngles, goalJointAngles, newPlan);
 	manipPlan = newPlan._retn();
 }
 
