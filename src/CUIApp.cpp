@@ -182,7 +182,7 @@ void CUIApp::showParams(){
 //
 //}
 
-void CUIApp::goStartPosition(double j[]){
+void CUIApp::goStartPosition(double home_j[]){
 	unsigned long spdRaion;
 	std::cout << "Enter joint spped [%]" << std::endl;
 	std::cin>>spdRaion;
@@ -192,10 +192,12 @@ void CUIApp::goStartPosition(double j[]){
 	JARA_ARM::JointPos_var jpos = new JARA_ARM::JointPos();
     jpos->length(6);
 	for (int i =0; i<6; i++){
-		jpos[i]=j[i];
+		jpos[i]=home_j[i];
+		std::cout << home_j[i] << std::endl;
 	}
 
-	m_rtc->callMovePTPJointRel(jpos);
+
+	m_rtc->callMovePTPJointAbs(jpos);
 
 }
 

@@ -239,7 +239,7 @@ class PickingTaskManager
    double m_home_j4;
    double m_home_j5;
    double m_home_j6;
-
+   double m_home_j[6];
   // </rtc-template>
 
   // DataInPort declaration
@@ -330,7 +330,7 @@ void callMoveGripper(const int degree);
 void callOpenGripper();
 void callSetHome(const JARA_ARM::JointPos_var jpos);
 void callGoHome();
-void callMovePTPJointRel(const JARA_ARM::JointPos_var jpos);
+void callMovePTPJointAbs(const JARA_ARM::JointPos_var jpos);
 void callSetSpeedJoint(unsigned long spdRation);
 
 };
