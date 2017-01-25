@@ -183,10 +183,10 @@ void CUIApp::showParams(){
 //}
 
 void CUIApp::goStartPosition(double home_j[]){
-	unsigned long spdRaion;
+	unsigned long spdRation;
 	std::cout << "Enter joint spped [%]" << std::endl;
-	std::cin>>spdRaion;
-
+	std::cin>>spdRation;
+	m_rtc->callSetSpeedJoint(spdRation);
 	std::cout << "Go home position with configuration parameters" << std::endl;
 
 	JARA_ARM::JointPos_var jpos = new JARA_ARM::JointPos();
