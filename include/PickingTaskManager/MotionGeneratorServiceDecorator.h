@@ -29,6 +29,8 @@ public:
   Manipulation::ReturnValue* followManipPlan(const Manipulation::ManipulationPlan& manipPlan);
 
   void connectionIs(bool b){isPortDisconnected=!b;}
+
+  bool getIsPortDisconn(){return isPortDisconnected;}
 };
 
 

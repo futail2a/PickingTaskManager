@@ -271,7 +271,7 @@ void PickingTaskManager::callOpenGripper(){
 void PickingTaskManager::refreshManipPlan(Manipulation::ManipulationPlan_var manipPlan){
     std::cout << "Refresh path" << std::endl;
 
-    /*
+
     std::cout << manipPlan ->manipPath.length()<<std::endl;
 	for(int i =0;i<manipPlan ->manipPath.length(); i++){
 	  for(int j=0;j<manipPlan ->manipPath[i].length();j++){
@@ -279,7 +279,7 @@ void PickingTaskManager::refreshManipPlan(Manipulation::ManipulationPlan_var man
 	  }
 	  std::cout <<std::endl;
 	}
-	*/
+    sleep(5);
 
 	Manipulation::JointAngleSeq_var currentJointAngles;
 	currentJointAngles = new Manipulation::JointAngleSeq();
@@ -312,8 +312,10 @@ void  PickingTaskManager::DisconnCallback::operator()(RTC::ConnectorProfile& pro
 }
 
 void  PickingTaskManager::ConnCallback::operator()(RTC::ConnectorProfile& profile){
-  std::cout << "setOnConnected called" << std::endl;
-  m_rtc->m_MotionGeneratorServiceDecorator->connectionIs(true);
+  if(m_rtc->m_MotionGeneratorServiceDecorator->getIsPortDisconn()== true){
+    std::cout << "setOnConnected called" << std::endl;
+    m_rtc->m_MotionGeneratorServiceDecorator->connectionIs(true);
+  }
 }
 
 extern "C"
