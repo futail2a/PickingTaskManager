@@ -69,6 +69,10 @@ void CUIApp::solveKinematics(){
 
 void CUIApp::searchMotionPlan(){
 	std::cout << "--Motion Plannig: Picking--" << std::endl;
+
+	for(int i=0;i<6;i++){
+		std::cout << m_startRobotJointAngles[i].data<< std::endl;
+	}
 	for(int i=0;i<6;i++){
 		std::cout << m_goalRobotJointAngles[i].data<< std::endl;
 	}
@@ -93,9 +97,9 @@ void  CUIApp::searchReplacingPlan(){
 
 	//TODO: Define these parameters as configuration
 	m_replacingRobotJointAngles->length(6);
-	m_replacingRobotJointAngles[0].data=-1.5;
-	m_replacingRobotJointAngles[1].data=1.0;
-	m_replacingRobotJointAngles[2].data=1.0;
+	m_replacingRobotJointAngles[0].data=-1.4;
+	m_replacingRobotJointAngles[1].data=0.9;
+	m_replacingRobotJointAngles[2].data=0.9;
 	m_replacingRobotJointAngles[3].data=0.0;
 	m_replacingRobotJointAngles[4].data=-0.5;
 	m_replacingRobotJointAngles[5].data=0.0;
@@ -106,7 +110,7 @@ void  CUIApp::searchReplacingPlan(){
 	m_rtc->callPlanManipulation(m_robotID, m_startRobotJointAngles, m_replacingRobotJointAngles, m_replacingPlan);
 
 	std::cout <<"Replacing motion plan:" << std::endl;
-	std::cout <<"length: " << m_manipPlan->manipPath.length() << std::endl;
+	std::cout <<"length: " << m_replacingPlan->manipPath.length() << std::endl;
 	for(int i =0;i<m_replacingPlan ->manipPath.length(); i++){
 	  for(int j=0;j<m_replacingPlan ->manipPath[i].length();j++){
 		std::cout << m_replacingPlan ->manipPath[i][j].data << " ";
@@ -140,7 +144,7 @@ void CUIApp::generateMotionPlan(){
 Manipulation::ManipulationPlan* CUIApp::inversePlan(const Manipulation::ManipulationPlan& plan){
 	Manipulation::ManipulationPlan_var tmp;
 	tmp = new Manipulation::ManipulationPlan();
-	tmp->manipPath.length(plan.manipPath.length()*6);
+	tmp->manipPath.length(plan.manipPath.length());
 
 	int k =0;
 	for(int i=plan.manipPath.length()-1; i>=0;i--){
@@ -150,6 +154,7 @@ Manipulation::ManipulationPlan* CUIApp::inversePlan(const Manipulation::Manipula
 		}
 		k+=1;
 	}
+	std::cout << "success calc inverse manip plan" << std::endl;
 	return tmp._retn();
 }
 
@@ -183,12 +188,12 @@ void CUIApp::showParams(){
 //}
 
 void CUIApp::goStartPosition(double home_j[]){
-	unsigned long spdRaion;
+	unsigned long spdRation;
 	std::cout << "Enter joint spped [%]" << std::endl;
-	std::cin>>spdRaion;
+	std::cin>>spdRation;
 
 	std::cout << "Go home position with configuration parameters" << std::endl;
-
+	m_rtc->callSetSpeedJoint(spdRation);
 	JARA_ARM::JointPos_var jpos = new JARA_ARM::JointPos();
     jpos->length(6);
 	for (int i =0; i<6; i++){
