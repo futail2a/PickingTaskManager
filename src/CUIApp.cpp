@@ -174,13 +174,13 @@ void CUIApp::debugReplication(){
     m_goalRobotJointAngles[4].data=-0.749;
     m_goalRobotJointAngles[5].data=0.0;
     m_goalRobotJointAngles[6].data=0.9;
-    /*
+
 	std::cout << "--Motion Plannig--" << std::endl;
-	//m_robotID->name = CORBA::string_dup("orochi");
 	m_robotID->name = CORBA::string_dup("orochi");
 	m_rtc->callPlanManipulation(m_robotID, m_startRobotJointAngles, m_goalRobotJointAngles, m_manipPlan);
-	writeManipPlanIntoCSV();*/
-	setSampleManipPlan();
+	//writeManipPlanIntoCSV();
+	//setSampleManipPlan();
+
 	std::cout << "--Start motion--" << std::endl;
 	//m_rtc->callMoveGripper(70);
 	m_rtc->callFollowManipPlan(m_manipPlan);

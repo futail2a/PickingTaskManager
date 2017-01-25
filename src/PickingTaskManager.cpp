@@ -178,7 +178,6 @@ RTC::ReturnCode_t PickingTaskManager::onExecute(RTC::UniqueId ec_id)
 
   case 'e':
           exit();
-          break;
     	  
   case 'h':
 	  std::cout << "1: detect target object" << std::endl;
