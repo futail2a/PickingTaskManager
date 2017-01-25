@@ -220,7 +220,7 @@ void CUIApp::setSampleManipPlan(){
 	std::cout << "Generate motion from a csv file" << std::endl;
 
 	std::string str;
-	std::ifstream ifs("sampleManipPath.csv");
+	std::ifstream ifs("m_manipPlan.csv");
 
 	if (!ifs){
 		std::cout << "error" << std::endl;
@@ -229,29 +229,23 @@ void CUIApp::setSampleManipPlan(){
 	int i = 0;
 	while (getline(ifs, str))
 	{
-
 		std::string tmp;
 		std::istringstream stream(str);
 		Manipulation::JointAngleSeq_var posture;
 
 		m_manipPlan->manipPath.length(i+1);
-                int j = 0;
+        int j = 0;
 		m_manipPlan->manipPath[i].length(6);
-		while (getline(stream, tmp, ','))
-		{
-	          double  angle;
-
-		  angle = std::stod(tmp);
-
-		  //int len = m_manipPlan->manipPath[i].length();
-		  //m_manipPlan->manipPath[i].length(len + 1);
-		  m_manipPlan->manipPath[i][j].data = angle;
-		  j++;
+		while (getline(stream, tmp, ',')){
+	        double  angle;
+		    angle = std::stod(tmp);
+		    m_manipPlan->manipPath[i][j].data = angle;
+		    j++;
 		}
 
 		int len = m_manipPlan->manipPath.length();
 		m_manipPlan->manipPath.length(len + 1);
 		i++;
 	}
-	  std::cout << "finish" << std::endl;
+	std::cout << "finish" << std::endl;
 }

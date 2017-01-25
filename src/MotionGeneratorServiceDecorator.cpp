@@ -9,8 +9,8 @@ MotionGeneratorServiceDecorator::MotionGeneratorServiceDecorator(RTC::CorbaConsu
 	m_MotionGeneratorService = pCorbaConsumer;
 	m_rtc = pRTC;
 	m_result = new Manipulation::ReturnValue();
-        m_result->returnID = Manipulation::ERROR_UNKNOWN;
-        m_result->message = CORBA::string_dup("No reply");
+    m_result->returnID = Manipulation::ERROR_UNKNOWN;
+    m_result->message = CORBA::string_dup("No reply");
 }
 
 Manipulation::ReturnValue* MotionGeneratorServiceDecorator::getCurrentRobotJointAngles(Manipulation::JointAngleSeq_out jointAngles){
@@ -22,40 +22,20 @@ Manipulation::ReturnValue* MotionGeneratorServiceDecorator::followManipPlan(cons
   plan = new Manipulation::ManipulationPlan(manipPlan);
 
   createFollowingThread(plan);
-  /*
-  while(!isPortDisconnected)
-    if(m_result->returnID==Manipulation::OK){
-      std::cout <<"RPC successed"<<std::endl;      
-      return m_result._retn();
-    }
-    if(isPortDisconnected){
-      std::cout <<"Port was Disconnected"<<std::endl;	  
 
-      while(true){
-        std::cout <<"Check port connection:"<<isPortDisconnected<<std::endl;	 
-        if(!isPortDisconnected){
-          std::cout<<"Retrying.."<<std::endl;
-          m_rtc->refreshManipPlan(plan);
-          std::cout << "successed refresh plan" << std::endl;
-          createFollowingThread(plan);
-         break;
-      }
-    }
-  }
-  */
   while(true){
     if(isPortDisconnected){
       std::cout <<"Port was Disconnected"<<std::endl;	  
       while(true){
-	std::cout <<"Check port connection:"<<isPortDisconnected<<std::endl;	 
-	  if(!isPortDisconnected){
-	    std::cout<<"Retrying.."<<std::endl;
-            m_rtc->refreshManipPlan(plan);
-	    std::cout << "successed refresh plan" << std::endl;
-            createFollowingThread(plan);
-	    break;
-          }
+	    std::cout <<"Check port connection:"<<isPortDisconnected<<std::endl;
+	    if(!isPortDisconnected){
+	      std::cout<<"Retrying.."<<std::endl;
+          m_rtc->refreshManipPlan(plan);
+	      std::cout << "successed refresh plan" << std::endl;
+          createFollowingThread(plan);
+	      break;
         }
+      }
     }
     
     if(m_result->returnID==Manipulation::OK){
@@ -64,7 +44,6 @@ Manipulation::ReturnValue* MotionGeneratorServiceDecorator::followManipPlan(cons
     }
   }
 
-  //RETURN_ID::ERROR_UNKNOWN;
   return m_result._retn();
 }
 
