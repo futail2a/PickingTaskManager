@@ -234,7 +234,13 @@ class PickingTaskManager
 
   // Configuration variable declaration
   // <rtc-template block="config_declare">
-
+   double m_home_j1;
+   double m_home_j2;
+   double m_home_j3;
+   double m_home_j4;
+   double m_home_j5;
+   double m_home_j6;
+   double m_home_j[6];
   // </rtc-template>
 
   // DataInPort declaration
@@ -332,6 +338,7 @@ public:
   
   void operator()(RTC::ConnectorProfile& profile);
 };
+	 double home_j[6]={};
 
  
  public:
@@ -347,8 +354,13 @@ public:
 	 void refreshManipPlan(const Manipulation::ManipulationPlan& manipPlan, Manipulation::ManipulationPlan_out newPlan);
 
 void callMoveGripper(const int degree);
-
 void callOpenGripper();
+void callSetHome(const JARA_ARM::JointPos_var jpos);
+void callGoHome();
+void callMovePTPJointAbs(const JARA_ARM::JointPos_var jpos);
+void callSetSpeedJoint(unsigned long spdRation);
+void callMovePTPCartesianRel(const JARA_ARM::CarPosWithElbow& carpos);
+  
 };
 
 extern "C"

@@ -9,7 +9,7 @@ MotionGeneratorServiceDecorator::MotionGeneratorServiceDecorator(RTC::CorbaConsu
 	m_MotionGeneratorService = pCorbaConsumer;
 	m_rtc = pRTC;
 	m_result = new Manipulation::ReturnValue();
-    m_result->returnID = Manipulation::ERROR_UNKNOWN;
+    m_result->id = Manipulation::ERROR_UNKNOWN;
     m_result->message = CORBA::string_dup("No reply");
 }
 

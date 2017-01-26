@@ -19,6 +19,7 @@ public:
 	void generateMotionPlan();
 	void showParams();
 	void searchReplacingPlan();
+	void goStartPosition(double j[]);
 
 	void debugReplication();
 
@@ -36,15 +37,26 @@ private:
 	Manipulation::JointAngleSeq_var m_goalRobotJointAngles;
 	Manipulation::JointAngleSeq_var m_replacingRobotJointAngles;
 
+	Manipulation::JointAngleSeq_var m_prestartRobotJointAngles;
+	Manipulation::JointAngleSeq_var m_pregoalRobotJointAngles;
+
+	
 	Manipulation::ManipulationPlan_var m_manipPlan;
 	Manipulation::ManipulationPlan_var m_invManipPlan;
+
+	Manipulation::ManipulationPlan_var m_preManipPlan;
+	Manipulation::ManipulationPlan_var m_invPreManipPlan;
+	
 
 	Manipulation::ManipulationPlan_var m_replacingPlan;
 	Manipulation::ManipulationPlan_var m_invReplacingPlan;
 
 
 	Manipulation::EndEffectorPose_var  m_targetPose;
+	Manipulation::EndEffectorPose_var  m_preTargetPose;
+
 	
+
 	PickingTaskManager* m_rtc;
 
 	Manipulation::ManipulationPlan* inversePlan(const Manipulation::ManipulationPlan& path);
