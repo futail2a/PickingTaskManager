@@ -30,10 +30,10 @@ static const char* pickingtaskmanager_spec[] =
     "lang_type",         "compile",
     // Configuration variables
     "conf.default.home_j1", "0",
-	"conf.default.home_j2", "0",
-	"conf.default.home_j3", "0",
+	"conf.default.home_j2", "-1",
+	"conf.default.home_j3", "1",
 	"conf.default.home_j4", "0",
-	"conf.default.home_j5", "0",
+	"conf.default.home_j5", "1.5",
 	"conf.default.home_j6", "0",
     // Widget
     "conf.__widget__.home_j1", "text",
@@ -115,13 +115,11 @@ RTC::ReturnCode_t PickingTaskManager::onInitialize()
   // </rtc-template>
   
   bindParameter("home_j1", m_home_j1, "0");
-  bindParameter("home_j2", m_home_j2, "0");
-  bindParameter("home_j3", m_home_j3, "0");
+  bindParameter("home_j2", m_home_j2, "-1");
+  bindParameter("home_j3", m_home_j3, "1");
   bindParameter("home_j4", m_home_j4, "0");
-  bindParameter("home_j5", m_home_j5, "0");
+  bindParameter("home_j5", m_home_j5, "1.5");
   bindParameter("home_j6", m_home_j6, "0");
-
-  double home_j[6]={m_home_j1,m_home_j2,m_home_j3,m_home_j4,m_home_j5,m_home_j6};
 
   return RTC::RTC_OK;
 }
@@ -171,8 +169,13 @@ RTC::ReturnCode_t PickingTaskManager::onExecute(RTC::UniqueId ec_id)
   switch(c){
 
   case '0':
-
-	  m_app->goStartPosition(home_j);
+	  m_home_j[0]=m_home_j1;
+	  m_home_j[1]=m_home_j2;
+	  m_home_j[2]=m_home_j3;
+	  m_home_j[3]=m_home_j4;
+	  m_home_j[4]=m_home_j5;
+	  m_home_j[5]=m_home_j6;
+	  m_app->goStartPosition(m_home_j);
 	  break;
 
   case '1':
@@ -300,8 +303,8 @@ void PickingTaskManager::callSetSpeedJoint(unsigned long spdRation){
 	m_manipulatorCommonInterface_Middle->setSpeedJoint(spdRation);
 }
 
-void PickingTaskManager::callMovePTPJointRel(const JARA_ARM::JointPos_var jpos){
-	m_manipulatorCommonInterface_Middle->movePTPJointRel(jpos);
+void PickingTaskManager::callMovePTPJointAbs(const JARA_ARM::JointPos_var jpos){
+	m_manipulatorCommonInterface_Middle->movePTPJointAbs(jpos);
 
 }
 
