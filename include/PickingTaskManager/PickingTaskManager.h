@@ -344,7 +344,7 @@ public:
 	 Manipulation::ReturnValue* callFollowManipPlan(const Manipulation::ManipulationPlan& manipPlan);
 	 Manipulation::ReturnValue* callGetApproachOrientation(const Manipulation::ObjectInfo& objInfo, Manipulation::EndEffectorPose_out eePos);
 
-	 void refreshManipPlan(const Manipulation::ManipulationPlan& manipPlan, Manipulation::ManipulationPlan_var newPlan);
+	 void refreshManipPlan(const Manipulation::ManipulationPlan& manipPlan, Manipulation::ManipulationPlan_out newPlan);
 
 void callMoveGripper(const int degree);
 

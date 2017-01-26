@@ -267,7 +267,7 @@ void PickingTaskManager::callOpenGripper(){
         m_manipulatorCommonInterface_Middle->openGripper();
 }
 
-void PickingTaskManager::refreshManipPlan(const Manipulation::ManipulationPlan& manipPlan, Manipulation::ManipulationPlan_var newPlan){
+void PickingTaskManager::refreshManipPlan(const Manipulation::ManipulationPlan& manipPlan, Manipulation::ManipulationPlan_out newPlan){
 	std::cout << "Refresh path" << std::endl;
     sleep(5);
 
@@ -275,14 +275,14 @@ void PickingTaskManager::refreshManipPlan(const Manipulation::ManipulationPlan& 
 	currentJointAngles = new Manipulation::JointAngleSeq();
 	callGetCurrentRobotJointAngles(currentJointAngles);	
 	
-	Manipulation::ManipulationPlan_var tmp;
-	tmp = new Manipulation::ManipulationPlan();
+	//Manipulation::ManipulationPlan_var tmp;
+	//tmp = new Manipulation::ManipulationPlan();
 	int n = manipPlan.manipPath.length();
 
 	Manipulation::JointAngleSeq_var goalJointAngles;
 	goalJointAngles = new Manipulation::JointAngleSeq(currentJointAngles);
 	for(int i=0; i<currentJointAngles->length();i++){
-		goalJointAngles[i].data = manipPlan.manipPath[n-2][i].data;//I dont understand why -2 instead of -1
+		goalJointAngles[i].data = manipPlan.manipPath[n-1][i].data;// before 2
 	}
 
 	Manipulation::RobotIdentifier_var robotID;
@@ -290,17 +290,17 @@ void PickingTaskManager::refreshManipPlan(const Manipulation::ManipulationPlan& 
 	robotID->name = CORBA::string_dup("orochi");
 
 	std::cout << "Try plan manipulation plan"<<std::endl;
-	callPlanManipulation(robotID, currentJointAngles, goalJointAngles, tmp);
-	newPlan = tmp._retn();
+	callPlanManipulation(robotID, currentJointAngles, goalJointAngles, newPlan);
+	//newPlan = tmp._retn();
+  	std::cout << "Refreshed plan"<<std::endl;
+  	std::cout << newPlan ->manipPath.length()<<std::endl;
+  	for(int i =0;i<newPlan ->manipPath.length(); i++){
+  	   for(int j=0;j<newPlan ->manipPath[i].length();j++){
+  	      std::cout << newPlan ->manipPath[i][j].data << " ";
+  	   }
+  	   std::cout <<std::endl;
+  	}
 
-	std::cout << "Refreshed plan"<<std::endl;
-	std::cout << newPlan ->manipPath.length()<<std::endl;
-	for(int i =0;i<newPlan ->manipPath.length(); i++){
-	   for(int j=0;j<newPlan ->manipPath[i].length();j++){
-	      std::cout << newPlan ->manipPath[i][j].data << " ";
-	   }
-	   std::cout <<std::endl;
-	}
 }
 
 
