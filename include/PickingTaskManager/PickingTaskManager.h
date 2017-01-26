@@ -233,7 +233,13 @@ class PickingTaskManager
 
   // Configuration variable declaration
   // <rtc-template block="config_declare">
-
+   double m_home_j1;
+   double m_home_j2;
+   double m_home_j3;
+   double m_home_j4;
+   double m_home_j5;
+   double m_home_j6;
+   double m_home_j[6];
   // </rtc-template>
 
   // DataInPort declaration
@@ -308,6 +314,7 @@ class PickingTaskManager
   // </rtc-template>]
 
 	 CUIApp* m_app;
+	 double home_j[6]={};
 
  public:
 	 Manipulation::ReturnValue* callDetectObject(const Manipulation::ObjectIdentifier& objectID, Manipulation::ObjectInfo_out objInfo);
@@ -318,12 +325,20 @@ class PickingTaskManager
 			 	 	 	 	 	 	 	 	 	 	 const Manipulation::JointAngleSeq& goalJointAngles, Manipulation::ManipulationPlan_out manipPlan);
 	 Manipulation::ReturnValue* callFollowManipPlan(const Manipulation::ManipulationPlan& manipPlan);
 	 Manipulation::ReturnValue* callGetApproachOrientation(const Manipulation::ObjectInfo& objInfo, Manipulation::EndEffectorPose_out eePos);
-};
 
+void callMoveGripper(const int degree);
+void callOpenGripper();
+void callSetHome(const JARA_ARM::JointPos_var jpos);
+void callGoHome();
+void callMovePTPJointAbs(const JARA_ARM::JointPos_var jpos);
+void callSetSpeedJoint(unsigned long spdRation);
+void callMovePTPCartesianRel(const JARA_ARM::CarPosWithElbow& carpos);
+  
+};
 
 extern "C"
 {
   DLL_EXPORT void PickingTaskManagerInit(RTC::Manager* manager);
-};
+  };
 
 #endif // PICKINGTASKMANAGER_H
