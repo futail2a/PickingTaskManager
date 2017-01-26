@@ -332,7 +332,8 @@ void callSetHome(const JARA_ARM::JointPos_var jpos);
 void callGoHome();
 void callMovePTPJointAbs(const JARA_ARM::JointPos_var jpos);
 void callSetSpeedJoint(unsigned long spdRation);
-
+void callMovePTPCartesianRel(const JARA_ARM::CarPosWithElbow& carpos);
+  
 };
 
 extern "C"

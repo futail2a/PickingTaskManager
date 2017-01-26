@@ -13,12 +13,20 @@ CUIApp::CUIApp(PickingTaskManager* compPtr)
 	m_goalRobotJointAngles = new Manipulation::JointAngleSeq();
 	m_replacingRobotJointAngles = new Manipulation::JointAngleSeq();
 
+	m_prestartRobotJointAngles = new Manipulation::JointAngleSeq();
+	m_pregoalRobotJointAngles = new Manipulation::JointAngleSeq();
+	m_preManipPlan = new Manipulation::ManipulationPlan();
+	
 	m_manipPlan = new Manipulation::ManipulationPlan();
 	m_invManipPlan = new Manipulation::ManipulationPlan();
 	m_invReplacingPlan = new Manipulation::ManipulationPlan();
+      	m_preManipPlan = new Manipulation::ManipulationPlan();
+     
 
 	m_replacingPlan = new Manipulation::ManipulationPlan();
-	m_targetPose = new Manipulation::EndEffectorPose;
+	m_targetPose = new Manipulation::EndEffectorPose();
+	//m_preTargetPose = new Manipulation::EndEffectorPose;
+
 
 	m_rtc = compPtr;
 }
@@ -34,7 +42,7 @@ void CUIApp::detectObj(){
 
 	m_objInfo->objectID.name = CORBA::string_dup(name.c_str());
 	m_objInfo->pose.position.x =0.0;
-    m_objInfo->pose.position.y =0.0;
+        m_objInfo->pose.position.y =0.0;
 	m_objInfo->pose.position.z =0.0;
 	m_objInfo->pose.orientation.p =0.0;
 	m_objInfo->pose.orientation.r =0.0;
@@ -55,15 +63,29 @@ void CUIApp::detectObj(){
 void CUIApp::determineApproachPose(){
 	std::cout << "--Generate EndEffector Pose--" << std::endl;
     m_rtc->callGetApproachOrientation(m_objInfo, m_targetPose);
-	
+    m_preTargetPose=new Manipulation::EndEffectorPose(m_targetPose);
+    m_preTargetPose->pose.position.x-=0.15;
+    
 	std::cout <<"ee x:"<< m_targetPose->pose.position.x<<" ee y:" <<m_targetPose->pose.position.y <<" ee z:"<< m_targetPose->pose.position.z << std::endl;
 	std::cout <<"ee p:"<< m_targetPose->pose.orientation.p<<" ee r:" <<m_targetPose->pose.orientation.r <<" ee y:"<< m_targetPose->pose.orientation.y << std::endl;
+
+std::cout <<"pre x:"<< m_preTargetPose->pose.position.x<<" ee y:" <<m_preTargetPose->pose.position.y <<" ee z:"<< m_preTargetPose->pose.position.z << std::endl;
+
 }
 
 void CUIApp::solveKinematics(){
 	std::cout << "--Solve Inverse Kinematics--" << std::endl;
 	m_rtc->callGetCurrentRobotJointAngles(m_startRobotJointAngles);
-	std::cout << m_rtc->callSolveKinematics(m_targetPose, m_startRobotJointAngles, m_goalRobotJointAngles)->message << std::endl;
+
+	Manipulation::ReturnValue_var resultPreKinematics = new Manipulation::ReturnValue();
+	resultPreKinematics = m_rtc->callSolveKinematics(m_preTargetPose, m_startRobotJointAngles, m_pregoalRobotJointAngles);
+	if (resultPreKinematics->returnID==0){       
+	    std::cout <<m_rtc->callSolveKinematics(m_targetPose, m_pregoalRobotJointAngles, m_goalRobotJointAngles)->message<< std::endl;
+	  }
+	else {
+	  std::cout << resultPreKinematics->message << std::endl;
+	}
+
 }
 
 
@@ -80,7 +102,9 @@ void CUIApp::searchMotionPlan(){
 
 	
 	m_robotID->name = CORBA::string_dup("orochi");
-	m_rtc->callPlanManipulation(m_robotID, m_startRobotJointAngles, m_goalRobotJointAngles, m_manipPlan);
+	m_rtc->callPlanManipulation(m_robotID, m_startRobotJointAngles, m_pregoalRobotJointAngles, m_preManipPlan);
+	//m_rtc->callPlanManipulation(m_robotID, m_goalRobotJointAngles, m_startRobotJointAngles, m_invManipPlan);
+	m_rtc->callPlanManipulation(m_robotID, m_pregoalRobotJointAngles, m_goalRobotJointAngles, m_manipPlan);
 
 	std::cout <<"Picking motion plan:" << std::endl;
 	std::cout <<"length: " << m_manipPlan->manipPath.length() << std::endl;
@@ -108,6 +132,7 @@ void  CUIApp::searchReplacingPlan(){
 	std::cout << "--Motion Plannig: Replacing--" << std::endl;
 	//m_robotID->name = CORBA::string_dup("orochi");
 	m_rtc->callPlanManipulation(m_robotID, m_startRobotJointAngles, m_replacingRobotJointAngles, m_replacingPlan);
+	//m_rtc->callPlanManipulation(m_robotID, m_replacingRobotJointAngles, m_startRobotJointAngles, m_invReplacingPlan);
 
 	std::cout <<"Replacing motion plan:" << std::endl;
 	std::cout <<"length: " << m_replacingPlan->manipPath.length() << std::endl;
@@ -123,15 +148,43 @@ void  CUIApp::searchReplacingPlan(){
 void CUIApp::generateMotionPlan(){
 	std::cout << "--Motion Generation--" << std::endl;
 
-	std::cout << "--Move to Target Object--" << std::endl;
-	m_rtc->callFollowManipPlan(m_manipPlan);
+	JARA_ARM::CarPosWithElbow targetPos;
+	targetPos.elbow = 0;
+	targetPos.carPos[0][0] = 1;
+	targetPos.carPos[0][1] = 0;
+	targetPos.carPos[0][2] = 0;
+	targetPos.carPos[0][3] = 0;
+	targetPos.carPos[1][0] = 0;
+	targetPos.carPos[1][1] = 1;
+	targetPos.carPos[1][2] = 0;
+	targetPos.carPos[1][3] = 0;
+	targetPos.carPos[2][0] = 0;
+	targetPos.carPos[2][1] = 0;
+	targetPos.carPos[2][2] = 1;
+	targetPos.carPos[2][3] = 0;
 
+	std::cout << "--Move to Target Object--" << std::endl;
+	m_rtc->callFollowManipPlan(m_preManipPlan);
+
+	std::cout << "Approaching" << std::endl;
+        //targetPos.carPos[0][3] = +100;
+	//m_rtc->callMovePTPCartesianRel(targetPos);
+	m_rtc->callFollowManipPlan(m_manipPlan);
+	
 	std::cout << "--Try Graspping--" << std::endl;
 	m_rtc->callMoveGripper(70);
 	sleep(3);
+	//targetPos.carPos[0][3] = -100;
+	//m_rtc->callMovePTPCartesianRel(targetPos);
+	
+	std::cout << "--Move to Init Pose--" << std::endl;
+	
 	m_invManipPlan = inversePlan(m_manipPlan);
 	m_rtc->callFollowManipPlan(m_invManipPlan);
 
+	m_invPreManipPlan = inversePlan(m_preManipPlan);
+	m_rtc->callFollowManipPlan(m_invPreManipPlan);
+	
 	std::cout << "--Move to Cargo--" << std::endl;
 	m_rtc->callFollowManipPlan(m_replacingPlan);
 	m_rtc->callOpenGripper();
@@ -146,6 +199,9 @@ Manipulation::ManipulationPlan* CUIApp::inversePlan(const Manipulation::Manipula
 	tmp = new Manipulation::ManipulationPlan();
 	tmp->manipPath.length(plan.manipPath.length());
 
+        //m_rtc->callPlanManipulation(m_robotID, m_goalRobotJointAngles, m_startRobotJointAngles, m_manipPlan);
+	
+	
 	int k =0;
 	for(int i=plan.manipPath.length()-1; i>=0;i--){
 		tmp->manipPath[k].length(plan.manipPath[i].length());

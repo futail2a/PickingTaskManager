@@ -308,6 +308,13 @@ void PickingTaskManager::callMovePTPJointAbs(const JARA_ARM::JointPos_var jpos){
 
 }
 
+void PickingTaskManager::callMovePTPCartesianRel(const JARA_ARM::CarPosWithElbow& carpos){
+  JARA_ARM::RETURN_ID_var result;
+	result = new JARA_ARM::RETURN_ID();
+	result = m_manipulatorCommonInterface_Middle->movePTPCartesianRel(carpos);
+	std::cout << "return id: "<<  result->id <<std::endl;
+}
+
 
 extern "C"
 {
