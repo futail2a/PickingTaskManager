@@ -21,7 +21,8 @@ Manipulation::ReturnValue* MotionGeneratorServiceDecorator::followManipPlan(cons
   Manipulation::ManipulationPlan_var plan;
   plan = new Manipulation::ManipulationPlan(manipPlan);
 
-  createFollowingThread(plan);
+  std::cout << "Create Thread" << std::endl;
+  std::thread following(&MotionGeneratorServiceDecorator::callFollowManipPlan, this, manipPlan);
 
   while(true){
     if(isPortDisconnected){
@@ -31,15 +32,17 @@ Manipulation::ReturnValue* MotionGeneratorServiceDecorator::followManipPlan(cons
 	    if(!isPortDisconnected){
 	      std::cout<<"Retrying.."<<std::endl;
           m_rtc->refreshManipPlan(plan);
-	      std::cout << "successed refresh plan" << std::endl;
-          createFollowingThread(plan);
+
+	      std::cout << "Create Thread" << std::endl;
+	      std::thread following(&MotionGeneratorServiceDecorator::callFollowManipPlan, this, manipPlan);
 	      break;
         }
       }
     }
     
     if(m_result->returnID==Manipulation::OK){
-      std::cout <<"RPC successed"<<std::endl;      
+      std::cout <<"RPC successed"<<std::endl;
+      following.join();
       return m_result._retn();
     }
   }
@@ -47,11 +50,12 @@ Manipulation::ReturnValue* MotionGeneratorServiceDecorator::followManipPlan(cons
   return m_result._retn();
 }
 
+//not used
 void MotionGeneratorServiceDecorator::createFollowingThread(const Manipulation::ManipulationPlan& manipPlan){
   std::cout << "Create Thread" << std::endl;
     try {
     std::thread following(&MotionGeneratorServiceDecorator::callFollowManipPlan, this, manipPlan);
-    following.detach();
+    following.join();
     } catch (std::exception &ex) {
     std::cerr << ex.what() << std::endl;
     }
@@ -59,10 +63,10 @@ void MotionGeneratorServiceDecorator::createFollowingThread(const Manipulation::
   
 int  MotionGeneratorServiceDecorator::callFollowManipPlan(const Manipulation::ManipulationPlan& manipPlan){
   try{
-  m_result = m_MotionGeneratorService->_ptr()->followManipPlan(manipPlan);
+    m_result = m_MotionGeneratorService->_ptr()->followManipPlan(manipPlan);
   }catch(CORBA::Exception& e) {
-   std::cout <<"RPC failed"<<std::endl;
-   return 1;
+    std::cout <<"RPC failed"<<std::endl;
+    return 1;
   }
   return 0;
 }

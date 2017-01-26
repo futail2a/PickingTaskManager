@@ -182,15 +182,15 @@ void CUIApp::debugReplication(){
 	//setSampleManipPlan();
 
 	std::cout << "--Start motion--" << std::endl;
-	//m_rtc->callMoveGripper(70);
+	m_rtc->callMoveGripper(70);
 	m_rtc->callFollowManipPlan(m_manipPlan);
 
 
 	std::cout << "--Start Inv motion--" << std::endl;
-	//m_rtc->callOpenGripper();
-	//sleep(3);
-	//m_invManipPlan = inversePlan(m_manipPlan);
-	//m_rtc->callFollowManipPlan(m_invManipPlan);
+	m_rtc->callOpenGripper();
+	sleep(3);
+	m_invManipPlan = inversePlan(m_manipPlan);
+	m_rtc->callFollowManipPlan(m_invManipPlan);
 
 
 }
