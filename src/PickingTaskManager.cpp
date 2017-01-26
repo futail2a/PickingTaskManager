@@ -267,31 +267,22 @@ void PickingTaskManager::callOpenGripper(){
         m_manipulatorCommonInterface_Middle->openGripper();
 }
 
-void PickingTaskManager::refreshManipPlan(Manipulation::ManipulationPlan_var manipPlan){
-    std::cout << "Refresh path" << std::endl;
-
-
-    std::cout << manipPlan ->manipPath.length()<<std::endl;
-	for(int i =0;i<manipPlan ->manipPath.length(); i++){
-	  for(int j=0;j<manipPlan ->manipPath[i].length();j++){
-		std::cout << manipPlan ->manipPath[i][j].data << " ";
-	  }
-	  std::cout <<std::endl;
-	}
+void PickingTaskManager::refreshManipPlan(const Manipulation::ManipulationPlan& manipPlan, Manipulation::ManipulationPlan_var newPlan){
+	std::cout << "Refresh path" << std::endl;
     sleep(5);
 
 	Manipulation::JointAngleSeq_var currentJointAngles;
 	currentJointAngles = new Manipulation::JointAngleSeq();
 	callGetCurrentRobotJointAngles(currentJointAngles);	
 	
-	Manipulation::ManipulationPlan_var newPlan;
-	newPlan = new Manipulation::ManipulationPlan();
-	int n = manipPlan->manipPath.length();
+	Manipulation::ManipulationPlan_var tmp;
+	tmp = new Manipulation::ManipulationPlan();
+	int n = manipPlan.manipPath.length();
 
 	Manipulation::JointAngleSeq_var goalJointAngles;
 	goalJointAngles = new Manipulation::JointAngleSeq(currentJointAngles);
 	for(int i=0; i<currentJointAngles->length();i++){
-		goalJointAngles[i].data = manipPlan->manipPath[n-2][i].data;//I dont understand why -2 instead of -1
+		goalJointAngles[i].data = manipPlan.manipPath[n-2][i].data;//I dont understand why -2 instead of -1
 	}
 
 	Manipulation::RobotIdentifier_var robotID;
@@ -299,11 +290,19 @@ void PickingTaskManager::refreshManipPlan(Manipulation::ManipulationPlan_var man
 	robotID->name = CORBA::string_dup("orochi");
 
 	std::cout << "Try plan manipulation plan"<<std::endl;
-	callPlanManipulation(robotID, currentJointAngles, goalJointAngles, newPlan);
-	manipPlan = newPlan._retn();
-	std::cout<<"debug: refresh succsess" << std::endl;
+	callPlanManipulation(robotID, currentJointAngles, goalJointAngles, tmp);
+	newPlan = tmp._retn();
 
+	std::cout << "Refreshed plan"<<std::endl;
+	std::cout << newPlan ->manipPath.length()<<std::endl;
+	for(int i =0;i<newPlan ->manipPath.length(); i++){
+	   for(int j=0;j<newPlan ->manipPath[i].length();j++){
+	      std::cout << newPlan ->manipPath[i][j].data << " ";
+	   }
+	   std::cout <<std::endl;
+	}
 }
+
 
 void  PickingTaskManager::DisconnCallback::operator()(RTC::ConnectorProfile& profile){
   std::cout << "setOnDisconnected called" << std::endl;

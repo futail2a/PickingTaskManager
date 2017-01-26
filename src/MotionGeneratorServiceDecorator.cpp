@@ -18,23 +18,24 @@ Manipulation::ReturnValue* MotionGeneratorServiceDecorator::getCurrentRobotJoint
 }
 
 Manipulation::ReturnValue* MotionGeneratorServiceDecorator::followManipPlan(const Manipulation::ManipulationPlan& manipPlan){
-  Manipulation::ManipulationPlan_var plan;
-  plan = new Manipulation::ManipulationPlan(manipPlan);
 
   std::cout << "Create Thread" << std::endl;
   std::thread following(&MotionGeneratorServiceDecorator::callFollowManipPlan, this, manipPlan);
 
   while(true){
     if(isPortDisconnected){
-      std::cout <<"Port was Disconnected"<<std::endl;	  
+      std::cout <<"Port was Disconnected"<<std::endl;
+      Manipulation::ManipulationPlan_var plan;
+      plan = new Manipulation::ManipulationPlan();
+
       while(true){
 	    std::cout <<"Check port connection:"<<isPortDisconnected<<std::endl;
 	    if(!isPortDisconnected){
 	      std::cout<<"Retrying.."<<std::endl;
-          m_rtc->refreshManipPlan(plan);
+          m_rtc->refreshManipPlan(manipPlan, plan);
 
 	      std::cout << "Create Thread" << std::endl;
-	      std::thread following(&MotionGeneratorServiceDecorator::callFollowManipPlan, this, manipPlan);
+	      std::thread following(&MotionGeneratorServiceDecorator::callFollowManipPlan, this, plan);
 	      break;
         }
       }
