@@ -79,7 +79,7 @@ void CUIApp::solveKinematics(){
 
 	Manipulation::ReturnValue_var resultPreKinematics = new Manipulation::ReturnValue();
 	resultPreKinematics = m_rtc->callSolveKinematics(m_preTargetPose, m_startRobotJointAngles, m_pregoalRobotJointAngles);
-	if (resultPreKinematics->returnID==0){       
+	if (resultPreKinematics->id==0){       
 	    std::cout <<m_rtc->callSolveKinematics(m_targetPose, m_pregoalRobotJointAngles, m_goalRobotJointAngles)->message<< std::endl;
 	  }
 	else {
